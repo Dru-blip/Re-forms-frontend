@@ -2,21 +2,26 @@ import { NextRequest, NextResponse } from "next/server";
 
 
 
-export function middleware(request:NextRequest){
-    const token=request.cookies.get("token")
-    const {pathname}:{pathname:string}=request.nextUrl
-    const authRoutes=['/login','/register']
+export function middleware(request: NextRequest) {
+    const token = request.cookies.get("token")
+    const { pathname }: { pathname: string } = request.nextUrl
 
+    const isAuthencticated = !!token
+    const isAuthPage = pathname.startsWith('/login') || pathname.startsWith("/register")
 
-    if(!token && !authRoutes.includes(pathname) ){
-        return NextResponse.redirect(new URL(pathname,request.url))
+    if (isAuthencticated) {
+        if (isAuthPage) {
+            return NextResponse.redirect(new URL('/', request.url))
+        }
+        return null
     }
-    else if(token && pathname!=='/'){
-        return NextResponse.redirect(new URL('/',request.url))
+
+    if (!isAuthencticated && !isAuthPage) {
+        return NextResponse.redirect(new URL('/login', request.url))
     }
-    return NextResponse.next()
+
 }
 
-export const config={
-    matcher:['/','/((?!api|_next/static|_next/image|favicon.ico).*)','/login','/register']
+export const config = {
+    matcher: ['/', '/login', '/register']
 }

@@ -19,7 +19,7 @@ export const registerFormAction=async(values: z.infer<typeof userRegisterSchema>
         })
 
         const data=await res.json()
-        if (data.msg === 'success') {
+        if (data) {
             if (data.token) {
                 cookies().set("token", data.token)
             }
@@ -27,6 +27,9 @@ export const registerFormAction=async(values: z.infer<typeof userRegisterSchema>
                 msg: "success"
             }
         }
+
+        console.log(data)
+        
         return {
             msg:"error"
         }
@@ -53,7 +56,7 @@ export const loginFormAction = async (values: z.infer<typeof userLoginSchema>) =
         })
 
         const data = await res.json()
-        if (data.msg === 'success') {
+        if (data) {
             if (data.token) {
                 cookies().set("token", data.token)
             }

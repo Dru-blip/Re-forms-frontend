@@ -1,7 +1,7 @@
 
 "use client"
 
-import { loginFormAction } from "@/lib/actions/forms"
+import { loginFormAction } from "@/lib/actions/auth"
 import { Input } from "../ui/input"
 import { Button } from "../ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../ui/card"
