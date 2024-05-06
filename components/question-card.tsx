@@ -1,6 +1,6 @@
 "use client"
 
-import { IQuestion, QuestionType } from "@/types";
+import { IForm, IQuestion, QuestionType } from "@/types";
 import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
 import { Input } from "./ui/input";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectSeparator, SelectTrigger, SelectValue } from "./ui/select";
@@ -13,11 +13,12 @@ import { Trash2, X } from "lucide-react";
 
 interface Props {
     question: IQuestion,
-    deleteQuestion: (id: number) => void
+    deleteQuestion: (id: string) => void,
+    updateQuestion:(id:string,question:IQuestion)=>void
 }
 
-export default function QuestionCard({ question, deleteQuestion }: Props) {
-    const { form, setForm } = useContext(FormContext)
+export default function QuestionCard({ question, deleteQuestion,updateQuestion}: Props) {
+    // const { form, setForm } = useContext(FormContext)
     const renderQuestion = () => {
         switch (question.type) {
             case "short": {
@@ -38,7 +39,7 @@ export default function QuestionCard({ question, deleteQuestion }: Props) {
                                 <div key={index} className="flex items-center justify-between">
                                     <Input value={option} onChange={(e) => {
                                         question.options![index] = e.target.value
-                                        updateQuestion()
+                                        updateQuestion(question.qid,question)
                                     }} />
                                     <Button size={"icon"} variant={"ghost"} onClick={() => deleteOption(index)}>
                                         <X className="w-4 h-4" />
@@ -56,7 +57,7 @@ export default function QuestionCard({ question, deleteQuestion }: Props) {
 
     const deleteOption = (index: number) => {
         question.options?.splice(index, 1)
-        updateQuestion()
+        updateQuestion(question.qid,question)
     }
 
     const addOption = () => {
@@ -65,23 +66,20 @@ export default function QuestionCard({ question, deleteQuestion }: Props) {
         } else {
             question.options = [`Option 1`]
         }
-        updateQuestion()
+        updateQuestion(question.qid,question)
     }
-    const updateQuestion = () => {
-        form.questions.set(question.id, question)
-        setForm({ ...form })
-    }
+ 
     const onQuestionTypeChange = (value: string) => {
         question.type = value as QuestionType
         question.options = []
-        updateQuestion()
+        updateQuestion(question.qid,question)
     }
     return (
         <Card key={question.id}>
             <CardHeader className="grid grid-cols-3 gap-3 items-baseline">
                 <Input className="col-span-2" value={question.name} onChange={(e) => {
                     question.name = e.target.value
-                    updateQuestion()
+                    updateQuestion(question.qid,question)
                 }} />
                 <Select onValueChange={onQuestionTypeChange}>
                     <SelectTrigger>
@@ -101,7 +99,7 @@ export default function QuestionCard({ question, deleteQuestion }: Props) {
                 }
             </CardContent>
             <CardFooter className="flex justify-end items-center">
-                <Button size={"icon"} variant={"outline"} onClick={() => deleteQuestion(question.id)}>
+                <Button size={"icon"} variant={"outline"} onClick={() => deleteQuestion(question.qid)}>
                     <Trash2 className="w-4 h-4" />
                 </Button>
             </CardFooter>

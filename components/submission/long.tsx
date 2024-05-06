@@ -19,8 +19,11 @@ export default function LongAnswer({question,answers,setAnswers}:Props){
         <Card className="p-4">
             <Label>{question.name}</Label>
             <Textarea placeholder="Your Answer" onChange={(e)=>{
-                 const newAnswers = answers.filter((ans) => ans.qid !== question.id)
-                 setAnswers([...newAnswers, { qid: question.id, name: question.name, answers: [e.target.value], type: question.type }])
+                 const newAnswers = answers.filter((ans) => ans.questionId !== question.id)
+                 setAnswers([...newAnswers, {
+                     questionId: question.id as string, name: question.name, value: [e.target.value], type: question.type,
+                     submissionId: ""
+                 }])
             }}></Textarea>
         </Card>
     )

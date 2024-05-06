@@ -2,7 +2,7 @@
 
 "use server"
 
-import { ApiResponse, IForm, ISubmission } from "@/types"
+import { ApiResponse, IAnswer, IForm, ISubmission } from "@/types"
 import { revalidatePath } from "next/cache"
 import { cookies } from "next/headers"
 
@@ -128,7 +128,7 @@ export const deleteForm=async (id:string):Promise<ApiResponse<IForm>> =>{
 }
 
 
-export const createSubmission=async (formId:string,submission:ISubmission):Promise<ApiResponse<ISubmission>> =>{
+export const createSubmission=async (formId:string,answers:IAnswer[]):Promise<ApiResponse<ISubmission>> =>{
     const token=cookies().get("token")?.value
     try {
         const response=await fetch(process.env.BASE_API+`/forms/${formId}/submit`,{
@@ -137,7 +137,7 @@ export const createSubmission=async (formId:string,submission:ISubmission):Promi
                 "Content-type":"application/json",
                 "Authorization":`Bearer ${token}`
             },
-            body:JSON.stringify(submission)
+            body:JSON.stringify(answers)
         })
         const res_data=await response.json()
         
@@ -153,24 +153,3 @@ export const createSubmission=async (formId:string,submission:ISubmission):Promi
     }
 }
 
-export const getSubmissions=async (id:string):Promise<ApiResponse<ISubmission[]>> =>{
-    const token=cookies().get("token")?.value
-    try {
-        const response=await fetch(process.env.BASE_API+`/forms/${id}/submissions`,{
-            headers:{
-                "Content-type":"application/json",
-                "Authorization":`Bearer ${token}`
-            },
-        })
-        const res_data=await response.json()
-        
-        return {
-            msg:"success",
-            data:res_data.responses
-        }
-    } catch (error) {
-        return {
-            msg:"error"
-        }
-    }
-}

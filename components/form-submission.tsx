@@ -16,21 +16,23 @@ import { Loader2Icon } from "lucide-react";
 
 
 interface Props {
-    form: IForm
+    form: IForm,
+    questions:IQuestion[]
 }
 
-export default function FormSubmission({ form }: Props) {
+export default function FormSubmission({ form,questions }: Props) {
     const [answers, setAnswers] = useState<IAnswer[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const onSumbit = async () => {
         setIsLoading(true)
         
         
-        let submission = { formId: form.id, response: JSON.stringify(answers.sort((a,b)=>a.qid-b.qid)) }
-        console.log(submission)
-        const res = await createSubmission(form.id, submission as ISubmission)
+        // let submission = { formId: form.id, response: JSON.stringify(answers) }
+        // console.log(answers)
+        // console.log(submission)
+        const res = await createSubmission(form.id,answers)
         if (res.msg === "success") {
-            // console.log(res.data)
+            console.log(res.data)
         }
         setIsLoading(false)
     }
@@ -60,7 +62,7 @@ export default function FormSubmission({ form }: Props) {
             </h1>
             <div className="grid grid-cols-1 gap-4 container py-8">
                 {
-                    form.questions ? Array.from(form.questions.values()).map((question) => (
+                    questions ? questions.map((question) => (
                         <div key={question.id}>
                             {
                                 renderQuestion(question)

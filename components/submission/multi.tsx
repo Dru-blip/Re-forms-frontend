@@ -17,9 +17,12 @@ export default function MultiAnswer({ question , answers,setAnswers }:Props) {
     return (
         <Card className="p-2">
             <RadioGroup value={answer} onValueChange={(val)=>{
-                const newAnswers = answers.filter((ans) => ans.qid !== question.id)
+                const newAnswers = answers.filter((ans) => ans.questionId !== question.id)
                 setAnswer(val)
-                setAnswers([...newAnswers, { qid: question.id, name: question.name, answers: [val], type: question.type }])
+                setAnswers([...newAnswers, {
+                    questionId: question.id as string, name: question.name, value: [val], type: question.type,
+                    submissionId: ""
+                }])
             }}>
                 <Label>{question.name}</Label>
                 {question.options?.map((value, ind) => (

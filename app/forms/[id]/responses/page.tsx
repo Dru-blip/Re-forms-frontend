@@ -1,30 +1,31 @@
 import FormResponses from "@/components/form-responses"
-import { getSubmissions } from "@/lib/actions/form"
-import { IAnswer } from "@/types"
+import { getQuestions } from "@/lib/actions/questions"
+import { getAnswers, getSubmissions } from "@/lib/actions/submissions"
+import { IAnswer, IQuestion, ISubmission } from "@/types"
+
+
+
 
 export default async function Responses({params}:{params:{id:string}}) {
     const data=await getSubmissions(params.id)
-    const parseFormSumbissions=()=>{
-        return data.data?.map((val)=>(
-            {...val,response:JSON.parse(val.response)}
-        ))
-    }
-    const getHeader=():string[]=>{
-        if(data.data!.length>0){
-            let singleResponse:IAnswer[]=JSON.parse(data.data![0].response)
-            let columns:string[]=[]
-            singleResponse.map((ans)=>{
-                columns.push(ans.name)
-            })
-            return columns
+    const questions=await getQuestions(params.id)
+    const getSubmissionAnswers=async ()=>{
+        let answers:any[]=[]
+        for(let submission of data.data!){
+            let answer:{date:Date,values:IAnswer[]}={date:submission.date,values:[]}
+            let data=await getAnswers(params.id,submission.id as string)
+            answer.values=data.data!
+            answers.push(answer)        
         }
-        return []
+
+        return answers
     }
-    const parsedSubmissions=parseFormSumbissions()
-    const columns=getHeader()
+    // await getSubmissionAnswers()
+    const answers=await getSubmissionAnswers()
+    // console.log(answers)
     return (
         <div>
-            <FormResponses submissions={parsedSubmissions as any[]} columns={columns}/>
+            <FormResponses  submissions={data.data! as ISubmission[]} responses={answers as {date:Date,values:IAnswer[]}[] } header={questions.data as IQuestion[]}/>
         </div>
     )
 }

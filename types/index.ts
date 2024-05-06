@@ -12,7 +12,7 @@ interface IForm{
     description:string,
     createdAt?:Date,
     fields:string,
-    questions:Map<number,IQuestion>
+    questions:IQuestion[]
 }
 
 type QuestionType='short'|'long'|'multi'
@@ -23,24 +23,27 @@ interface IOption{
 }
 
 interface IQuestion{
-    id:number,
+    qid:string,
+    id?:string,
     name:string,
     type:QuestionType,
     options?:string[]
+    formId:string
 }
 
 interface IAnswer{
-    qid:number
+    id?:string,
+    questionId:string
     name:string
     type:QuestionType
-    answers?:string[]
+    value?:string[],
+    submissionId:string,
 }
 
 interface ISubmission{
     id:string,
     date:Date,
-    response:string,
-    responseMap:Map<string,IAnswer>
+    answers:IAnswer[],
     userId:string,
     formId:string
 }

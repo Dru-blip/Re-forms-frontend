@@ -1,6 +1,6 @@
 "use client"
 
-import { IAnswer, ISubmission } from "@/types";
+import { IAnswer, IQuestion, ISubmission } from "@/types";
 import { Button } from "./ui/button";
 import Link from "next/link";
 import {
@@ -17,55 +17,58 @@ import { useEffect } from "react";
 
 
 interface Props {
-    submissions: any[],
-    columns: string[]
+    responses: {date:Date,values:IAnswer[]}[],
+    submissions:ISubmission[]
+    header:IQuestion[]
+    // columns: string[]
 }
 
-export default function FormResponses({ submissions, columns }: Props) {
-    // console.log(submissions)
-    useEffect(()=>{
-        console.log(submissions)
-    })
+export default function FormResponses({ responses,submissions,header }: Props) {
+    
+  
     return (
         <div className="container py-8">
             <Link href={'/dashboard'}>
                 <Button>Dashboard</Button>
             </Link>
-            <Table>
+            
+            <Table >
                 <TableHeader>
                     <TableRow>
-                    <TableHead>Date</TableHead>
+                        <TableHead >Date</TableHead>
                         {
-                            columns ? columns.map((column,index) => (
-                                <TableHead key={index}>{column}</TableHead>
-                            )) : <></>
+                            header.map((column,index)=>{
+                                return <TableHead  key={index}>{column.name}</TableHead>
+                            })
                         }
-                       
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     {
-                        submissions.length > 0 ? submissions.map((submission,index) => (
-                            <TableRow key={index}>
-                                <TableCell>{format(submission.date,"Pp")}</TableCell>
-                                {
-                                    
-                                    submission.response.map((res:IAnswer)=>(
-                                        <TableCell key={res.qid}>
-                                            {
-                                                res.answers!?res.answers.map((ans,index)=>(<p key={index}>{ans}</p>)):<></>
-                                            }
-                                            
-                                        </TableCell>
-                                    ))
-                                }
-                               
-                            </TableRow>
-                        ))
-                            : <></>
+
+                        responses.map((response,index)=>{
+                            return (
+                                <TableRow key={index}>
+                                    <TableCell >{format(response.date,"Pp")}</TableCell>
+                                    {
+                                        response.values.map((value,index)=>(
+                                            <TableCell  key={index}>{value.value?.join("")}</TableCell>
+                                        ))
+                                    }
+                                </TableRow>
+                            )
+                        })
+                        // submissions.map((submission,index)=>{
+                        //     return (
+                        //         <TableRow key={index}>
+                        //             {format()}
+                        //         </TableRow>
+                        //     )
+                        // })
                     }
                 </TableBody>
             </Table>
         </div>
     )
 }
+

@@ -15,8 +15,12 @@ export default function ShortAnswer({ question, setAnswers, answers }: Props) {
         <div>
             <Label>{question.name}</Label>
             <Input placeholder="Your Answer" onChange={(e) => {
-                const newAnswers = answers.filter((ans) => ans.qid !== question.id)
-                setAnswers([...newAnswers, { qid: question.id, name: question.name, answers: [e.target.value], type: question.type }])
+                const newAnswers = answers.filter((ans) => ans.questionId !== question.id)
+                setAnswers([...newAnswers, {
+                    questionId: question.id as string, name: question.name, value: [e.target.value], type: question.type,
+                    submissionId: "",
+                    
+                }])
             }} />
         </div>
     )
