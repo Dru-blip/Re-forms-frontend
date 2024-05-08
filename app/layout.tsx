@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Poppins ,Roboto} from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider"
 import Header from "@/components/header";
-const inter = Inter({ subsets: ["latin"] });
+import { Toaster } from "@/components/ui/sonner"
+
+// const  roboto=Roboto({subsets:["latin"],weight:["400","700"]})
+const poppins = Poppins({ subsets: ["latin"], variable: "--font-sans", weight: ["400","700"] });
 
 export const metadata: Metadata = {
   title: "Re-forms",
@@ -17,7 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={poppins.className}>
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
@@ -25,9 +28,10 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <div className="grid grid-cols-1">
-            <Header/>
+            {/* <Header/> */}
             {children}
           </div>
+          <Toaster richColors/>
         </ThemeProvider>
       </body>
     </html>

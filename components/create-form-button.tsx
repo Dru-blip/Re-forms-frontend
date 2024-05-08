@@ -22,7 +22,7 @@ export default function CreateFormButton() {
             title: "Untitled Form",
             description: "",
             fields: JSON.stringify([]),
-            questions: new Map()
+            questions: []
         }
         // setForms([...forms, newForm])
         const form=await createForm(newForm)

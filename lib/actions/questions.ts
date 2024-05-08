@@ -27,7 +27,7 @@ export const getQuestions=async (formId:string):Promise<ApiResponse<IQuestion[]>
     }
 }
 
-export const createQuestions=async(formId:string,questions:IQuestion[]):Promise<ApiResponse<IQuestion[]>> =>{
+export const createQuestions=async(formId:string,questions:IQuestion[],deletedQuestions:IQuestion[]):Promise<ApiResponse<IQuestion[]>> =>{
     const token=cookies().get("token")?.value
     try {
         const response=await fetch(process.env.BASE_API+`/forms/${formId}/questions`,{
@@ -36,11 +36,11 @@ export const createQuestions=async(formId:string,questions:IQuestion[]):Promise<
                 "Content-type":"application/json",
                 "Authorization":`Bearer ${token}`
             },
-            body:JSON.stringify({questions})
+            body:JSON.stringify({questions,deletedQuestions})
         })
         const res_data=await response.json()
         // console.log(res_data)
-        // revalidatePath('/dashboard')
+        // revalidatePath(`/forms/${formId}/edit`)
         return {
             msg:"success",
             // data:res_data

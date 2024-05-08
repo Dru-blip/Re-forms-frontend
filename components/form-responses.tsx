@@ -25,7 +25,6 @@ interface Props {
 
 export default function FormResponses({ responses,submissions,header }: Props) {
     
-  
     return (
         <div className="container py-8">
             <Link href={'/dashboard'}>
@@ -37,9 +36,9 @@ export default function FormResponses({ responses,submissions,header }: Props) {
                     <TableRow>
                         <TableHead >Date</TableHead>
                         {
-                            header.map((column,index)=>{
+                           header? header.map((column,index)=>{
                                 return <TableHead  key={index}>{column.name}</TableHead>
-                            })
+                            }):<></>
                         }
                     </TableRow>
                 </TableHeader>

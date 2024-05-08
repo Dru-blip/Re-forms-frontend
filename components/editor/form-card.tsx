@@ -1,12 +1,12 @@
 "use client"
 
 import { IForm } from "@/types";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./ui/card";
-import { Label } from "./ui/label";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../ui/card";
+import { Label } from "../ui/label";
 import { format } from 'date-fns'
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { BanIcon, Loader2Icon, Trash2, X } from "lucide-react";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "./ui/alert-dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "../ui/alert-dialog";
 import { useState } from "react";
 import { deleteForm } from "@/lib/actions/form";
 import Link from "next/link";
@@ -29,7 +29,7 @@ export default function FormCard({ form }: Props) {
         <Card className="flex justify-between">
             <CardHeader>
                 <CardTitle>
-                    <Link href={`/forms/${form.id}/edit`} className="hover:underline font-semibold">
+                    <Link href={`/forms/${form.id}/edit`} className="hover:underline ">
                         {form.title}
                     </Link>
                 </CardTitle>
@@ -38,7 +38,7 @@ export default function FormCard({ form }: Props) {
             </CardHeader>
             <CardFooter>
                 <Link href={`/forms/${form.id}/responses`}>
-                    <Button>View Submissions</Button>
+                    <Button>View Responses</Button>
                 </Link>
 
                 <AlertDialog>

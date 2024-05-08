@@ -17,8 +17,8 @@ interface Props{
 export default function LongAnswer({question,answers,setAnswers}:Props){
     return (
         <Card className="p-4">
-            <Label>{question.name}</Label>
-            <Textarea placeholder="Your Answer" onChange={(e)=>{
+            <Label className="font-semibold text-md leading-3"> {question.name}{question.required ? <span className="text-red-600">*</span> : <></>}</Label>
+            <Textarea required={question.required} placeholder="Your Answer" onChange={(e)=>{
                  const newAnswers = answers.filter((ans) => ans.questionId !== question.id)
                  setAnswers([...newAnswers, {
                      questionId: question.id as string, name: question.name, value: [e.target.value], type: question.type,

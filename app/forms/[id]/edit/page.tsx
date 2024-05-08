@@ -1,4 +1,5 @@
-import FormEditor from "@/components/form-editor";
+import FormEditor from "@/components/editor/form-editor";
+import EditPageHeader from "@/components/editor/header";
 import { Button } from "@/components/ui/button";
 import { getForm } from "@/lib/actions/form";
 import { getQuestions } from "@/lib/actions/questions";
@@ -26,18 +27,8 @@ export default async function EditPage({ params }: { params: { id: string } }) {
     // console.log(questions)
     // console.log(form.)
     return (
-        <div className="flex flex-col container py-8">
-            <div className="flex items-center justify-between">
-                <Link href={"/dashboard"}>
-                    <Button>
-                        <ArrowLeft className="mr-2 w-4 h-4" />
-                        Dashboard
-                    </Button>
-                </Link>
-                <Link target="_blank" href={`/forms/${params.id}/live`}>
-                    <Button><Eye className="mr-2 w-4 h-4"/> Preview</Button>
-                </Link>
-            </div>
+        <div className="flex flex-col">
+            <EditPageHeader id={params.id} title={form.data?.title!}/>
             <div>
                 <FormEditor formData={{ ...form.data}  as IForm}  questions={questions.data as IQuestion[]}/>
             </div>

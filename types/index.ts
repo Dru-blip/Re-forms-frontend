@@ -27,7 +27,8 @@ interface IQuestion{
     id?:string,
     name:string,
     type:QuestionType,
-    options?:string[]
+    options?:string[],
+    required:boolean,
     formId:string
 }
 
@@ -51,8 +52,11 @@ interface ISubmission{
 interface FormContextProps{
     form:IForm,
     setForm:React.Dispatch<React.SetStateAction<IForm>>,
+    formQuestions:IQuestion[]
     // qorder:number[]
-    // setQOrder:React.Dispatch<React.SetStateAction<number[]>>
+    setQuestions:React.Dispatch<React.SetStateAction<IQuestion[]>>
+    deletedQuestions:IQuestion[]
+    setDeletedQuestions:React.Dispatch<React.SetStateAction<IQuestion[]>>
 }
 
 export  type {IForm,IQuestion,FormContextProps,ApiResponse,QuestionType,IAnswer,ISubmission}
