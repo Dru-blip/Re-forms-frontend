@@ -5,11 +5,12 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Label } from "../ui/label";
 import { format } from 'date-fns'
 import { Button } from "../ui/button";
-import { BanIcon, Loader2Icon, Trash2, X } from "lucide-react";
+import { BanIcon, EllipsisVertical, Loader2Icon, Trash, Trash2, X } from "lucide-react";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "../ui/alert-dialog";
 import { useState } from "react";
 import { deleteForm } from "@/lib/actions/form";
 import Link from "next/link";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
 
 interface Props {
     form: IForm
@@ -37,36 +38,45 @@ export default function FormCard({ form }: Props) {
                 <Label>{format(form.createdAt as Date, "PPP")}</Label>
             </CardHeader>
             <CardFooter>
-                <Link href={`/forms/${form.id}/responses`}>
-                    <Button>View Responses</Button>
-                </Link>
+                <DropdownMenu>
+                    <DropdownMenuTrigger>
+                        <EllipsisVertical />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                        <DropdownMenuItem className="bg-accent">
+                            <Link href={`/forms/${form.id}/responses`}>
+                                Responses
+                            </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator/>
+                        <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                                <Button size={"icon"} variant={"ghost"} className="w-full pl-1 justify-start text-left">
+                                    Delete
+                                </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                                <AlertDialogHeader>
+                                    <AlertDialogTitle>Are you sure you want to delete?</AlertDialogTitle>
+                                    <AlertDialogDescription>This action cannot be undone ,this will permanently delete the form.</AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                    <AlertDialogCancel>
+                                        <BanIcon className="mr-2 w-4 h-4" />
+                                        Cancel
+                                    </AlertDialogCancel>
+                                    <AlertDialogAction className="bg-destructive" disabled={isLoading} onClick={onClick}>
+                                        {
 
-                <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                        <Button size={"icon"} variant={"ghost"}>
-                            <X className="w-4 h-4" />
-                        </Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                        <AlertDialogHeader>
-                            <AlertDialogTitle>Are you sure you want to delete?</AlertDialogTitle>
-                            <AlertDialogDescription>This action cannot be undone ,this will permanently delete the form.</AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                            <AlertDialogCancel>
-                                <BanIcon className="mr-2 w-4 h-4" />
-                                Cancel
-                            </AlertDialogCancel>
-                            <AlertDialogAction className="bg-destructive" disabled={isLoading} onClick={onClick}>
-                                {
-
-                                    isLoading ? <Loader2Icon className="mr-2 w-4 h-4" /> : <Trash2 className="mr-2 w-4 h-4" />
-                                }
-                                Delete
-                            </AlertDialogAction>
-                        </AlertDialogFooter>
-                    </AlertDialogContent>
-                </AlertDialog>
+                                            isLoading ? <Loader2Icon className="mr-2 w-4 h-4" /> : <Trash2 className="mr-2 w-4 h-4" />
+                                        }
+                                        Delete
+                                    </AlertDialogAction>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialog>
+                    </DropdownMenuContent>
+                </DropdownMenu>
             </CardFooter>
         </Card>
     )

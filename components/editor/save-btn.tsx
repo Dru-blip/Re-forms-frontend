@@ -22,7 +22,7 @@ export default function FormSaveButton() {
         setIsLoading(false)
     }
     return (
-        <Button disabled={isLoading} variant={"ghost"} onClick={onClick}>
+        <Button disabled={isLoading} variant={"ghost"} onClick={onClick} className="hover:underline">
             {
                 isLoading ? <Loader2Icon className="mr-2 w-4 h-4 animate-spin" /> : <></>
             }

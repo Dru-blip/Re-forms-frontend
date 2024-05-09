@@ -28,7 +28,7 @@ export default async function EditPage({ params }: { params: { id: string } }) {
     // console.log(form.)
     return (
         <div className="flex flex-col">
-            <EditPageHeader id={params.id} title={form.data?.title!}/>
+            {/* <EditPageHeader id={params.id} title={form.data?.title!}/> */}
             <div>
                 <FormEditor formData={{ ...form.data}  as IForm}  questions={questions.data as IQuestion[]}/>
             </div>

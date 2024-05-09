@@ -10,7 +10,7 @@ export default async function SubmitPage({ params }: { params: { id: string } })
 
 
     return (
-        <div className="container py-8">
+        <div className="container">
             <FormSubmission form={{...form.data} as IForm} questions={questions.data as IQuestion[]}/>
         </div>
     )

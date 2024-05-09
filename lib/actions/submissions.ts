@@ -1,6 +1,6 @@
 "use server"
 
-import { ApiResponse, ISubmission } from "@/types"
+import { ApiResponse, IAnswer, ISubmission } from "@/types"
 import { cookies } from "next/headers"
 
 
@@ -21,6 +21,30 @@ export const getAnswers=async (formId:string,questionId:string)=>{
             data:res_data.answers
         }
     }catch(err){
+        return {
+            msg:"error"
+        }
+    }
+}
+
+export const getAnswersByQuestion=async (formId:string,questionId:string):Promise<ApiResponse<IAnswer[]>> =>{
+    const token=cookies().get("token")?.value
+    
+    try{
+        const response=await fetch(process.env.BASE_API+`/forms/${formId}/question/${questionId}/answers`,{
+            headers:{
+                "Content-type":"application/json",
+                "Authorization":`Bearer ${token}`
+            },
+        })
+        const res_data=await response.json()
+        // console.log(res_data)
+        return {
+            msg:"success",
+            data:res_data.answers
+        }
+    }catch(err){
+        console.log(err)
         return {
             msg:"error"
         }
