@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectSepa
 import { useContext, useState } from "react";
 import FormContext from "@/context/form-context";
 import { Button } from "../ui/button";
-import { Circle, CircleDotIcon, CopyIcon, Notebook, NotepadText, Plus, Trash2, X } from "lucide-react";
+import {  Circle, CircleDotIcon, CopyIcon, Notebook, NotepadText, Plus, Square, SquareCheck, Trash2, X } from "lucide-react";
 import { Switch } from "../ui/switch";
 import { Label } from "../ui/label";
 import { Separator } from "../ui/separator";
@@ -48,6 +48,9 @@ export default function QuestionCard({ question, index, updateQuestion }: Props)
             case "multi":{
                 return <CircleDotIcon className="w-4 h-4 mr-2"/>
             }
+            case "checkbox":{
+                return <SquareCheck className="w-4 h-4 mr-2"/>
+            }
             default:{
                 return <></>
             }
@@ -66,14 +69,18 @@ export default function QuestionCard({ question, index, updateQuestion }: Props)
                     <div className="bg-accent rounded-md p-3">Long answer Here</div>
                 )
             }
-            default: {
+            case "multi":
+            case "checkbox":{
                 return (
                     <div className="grid grid-cols-1 gap-4  p-2">
                         {
                             question.options ? question.options.map((option, ind) => (
                                 <div key={ind} className="flex items-center justify-between">
                                     <div className="flex items-center w-full">
-                                        <Circle className=" mr-2 w-6 h-6 text-gray-500"/>
+                                        {
+                                            question.type==="multi"?<Circle className=" mr-2 w-6 h-6 text-gray-500"/>:<Square className="mr-2 w-6 h-6 text-gray-500"/>
+                                        }
+                                        
                                         <Input value={option} onChange={(e) => {
                                             question.options![ind] = e.target.value
                                             updateQuestion(question.qid, index, question)
@@ -94,6 +101,9 @@ export default function QuestionCard({ question, index, updateQuestion }: Props)
                         </Button>
                     </div>
                 )
+            }
+            default: {
+                return <></>
             }
         }
     }
@@ -139,6 +149,7 @@ export default function QuestionCard({ question, index, updateQuestion }: Props)
                             <SelectItem value="long">long</SelectItem>
                             <SelectSeparator></SelectSeparator>
                             <SelectItem value="multi">multi</SelectItem>
+                            <SelectItem value="checkbox">checkbox</SelectItem>
                         </SelectContent>
                     </Select>
                 </div>

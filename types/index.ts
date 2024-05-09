@@ -15,7 +15,7 @@ interface IForm{
     questions:IQuestion[]
 }
 
-type QuestionType='short'|'long'|'multi'
+type QuestionType='short'|'long'|'multi'|'checkbox'
 
 interface IOption{
     id:number

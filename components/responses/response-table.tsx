@@ -33,7 +33,7 @@ export default function ResponseTable({header,responses}:Props){
                                     <TableCell >{format(response.date,"Pp")}</TableCell>
                                     {
                                         response.values.map((value,index)=>(
-                                            <TableCell  key={index}>{value.value?.join("")}</TableCell>
+                                            <TableCell  key={index}>{value.value?.join(" , ")}</TableCell>
                                         ))
                                     }
                                 </TableRow>

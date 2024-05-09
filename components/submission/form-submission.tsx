@@ -13,6 +13,7 @@ import { Button } from "../ui/button";
 import { useEffect, useState } from "react";
 import { createSubmission } from "@/lib/actions/form";
 import { Loader2Icon } from "lucide-react";
+import CheckboxAnswers from "./checkbox";
 
 
 interface Props {
@@ -55,6 +56,9 @@ export default function FormSubmission({ form, questions }: Props) {
                 return (
                     <MultiAnswer question={question} answers={answers} setAnswers={setAnswers} />
                 )
+            }
+            case "checkbox":{
+                return <CheckboxAnswers question={question} answers={answers} setAnswers={setAnswers} />
             }
             default: {
                 return <></>

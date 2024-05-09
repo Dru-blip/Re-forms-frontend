@@ -1,16 +1,18 @@
+
+
 "use client"
 
 import { IAnswer } from "@/types";
 import { useEffect, useMemo, useRef } from "react";
-import { Cell, Legend, Pie, PieChart, Tooltip } from "recharts"
+import { Bar, BarChart, Cell, Legend, Pie, PieChart, Tooltip, XAxis, YAxis } from "recharts"
 
 interface Props {
     options: string[]
     values: IAnswer[]
 }
 
-export default function PieChartComponent({ options, values }: Props) {
-    
+export default function BarChartComponent({ options, values }: Props) {
+
     const generatePieColors = () => {
         return options.map(() => ("#" + Math.floor(Math.random() * 16777215).toString(16)))
     }
@@ -19,7 +21,7 @@ export default function PieChartComponent({ options, values }: Props) {
         return options.map((option) => {
             let count = 0
             values.map((value) => {
-                if (value.value?.at(0) === option) {
+                if (value.value?.findIndex((val)=>val===option)!==-1) {
                     count += 1
                 }
             })
@@ -27,19 +29,20 @@ export default function PieChartComponent({ options, values }: Props) {
         })
     }
     const colors=useMemo(()=>generatePieColors(),[options])
-    const data=useMemo(()=>getOptionValues(),[options,values])
-    
+    const data = useMemo(() => getOptionValues(), [options, values])
     return (
-        <PieChart width={730} height={250} >
-            <Pie dataKey="count" nameKey="option" cx="50%" cy="50%" innerRadius={60} outerRadius={80} label data={data} >
+        <BarChart width={730} height={350} data={data}>
+            <XAxis dataKey="option" />
+            <YAxis />
+            <Bar dataKey="count">
                 {
                     data.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={colors[index]} />
+                        <Cell key={`cell-${index}`} fill={colors[index]}  />
                     ))
                 }
-            </Pie>
+            </Bar>
             <Legend />
             <Tooltip />
-        </PieChart>
+        </BarChart>
     )
 }

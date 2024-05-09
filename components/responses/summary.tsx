@@ -3,7 +3,8 @@ import { getAnswersByQuestion } from "@/lib/actions/submissions"
 import { IAnswer, IQuestion } from "@/types"
 import SummaryClient from "./summary-client"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card"
-import PieChartComponent from "./charts/PieChartComponent"
+import PieChartComponent from "./charts/pie-chart-component"
+import BarChartComponent from "./charts/bar-chart-component"
 
 
 type QuestionAnswer = { question: IQuestion, values: IAnswer[] }[]
@@ -33,6 +34,9 @@ export default async function Summary({ id }: { id: string }) {
             }
             case "multi":{
                 return <PieChartComponent options={question.options!} values={values}/>
+            }
+            case "checkbox":{
+                return <BarChartComponent options={question.options!} values={values}/>
             }
         }
     }

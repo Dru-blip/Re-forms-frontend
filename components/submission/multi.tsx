@@ -45,39 +45,3 @@ export default function MultiAnswer({ question, answers, setAnswers }: Props) {
 
     )
 }
-
-
-//  {/* <RadioGroup className={"flex flex-col gap-3 rounded"} value={answer} onChange={setAnswer} aria-label="Server size">
-//                 {question.options ? question.options.map((option, index) => (
-//                     <Field key={index} className="flex items-center justify-between gap-5 p-4 rounded-md bg-accent">
-//                         <Label>{option}</Label>
-//                         <Radio
-//                             value={option}
-//                             className="group flex size-5 items-center justify-center rounded-full border bg-white data-[checked]:bg-black"
-//                         >
-//                             <span className="invisible size-2 rounded-full bg-white group-data-[checked]:visible" />
-//                         </Radio>
-
-//                     </Field>
-//                 )) : <></>}
-//             </RadioGroup> */}
-
-// <RadioGroup required={question.required} value={answer} onValueChange={(val) => {
-//     const newAnswers = answers.filter((ans) => ans.questionId !== question.id)
-//     setAnswer(val)
-//     setAnswers([...newAnswers, {
-//         questionId: question.id as string, name: question.name, value: [val], type: question.type,
-//         submissionId: ""
-//     }])
-// }}>
-//     <Label className="font-semibold text-md leading-3">{question.name}{question.required ? <span className="text-red-600">*</span> : <></>}</Label>
-//     <div className="flex flex-col gap-3">
-//         {question.options?.map((value, ind) => (
-//             <div key={ind} className="flex items-center">
-//                 <RadioGroupItem className="mr-2" value={value} />
-//                 <Label>{value}</Label>
-//             </div>
-//         ))}
-//     </div>
-
-// </RadioGroup>
