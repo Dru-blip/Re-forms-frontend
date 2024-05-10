@@ -14,6 +14,7 @@ import FormContext from "@/context/form-context"
 import { Card } from "../ui/card"
 import { Input } from "../ui/input"
 import { Label } from "../ui/label"
+import { getRandomNumber } from "@/lib/utils"
 
 interface Props {
     formData: IForm,
@@ -29,7 +30,7 @@ export default function FormEditor({ formData, questions }: Props) {
     }, [])
 
     const addQuestion = () => {
-        const qid = String(Math.round((Math.random() + 1) * 100000))
+        const qid = getRandomNumber()
         formQuestions.push({ qid: qid, name: "", type: "short", formId: formData.id, options: [], required: false })
         setQuestions([...formQuestions])
     }

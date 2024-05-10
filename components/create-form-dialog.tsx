@@ -34,8 +34,10 @@ export default function CreateFormDialog() {
     }
     return (
         <Dialog>
-            <DialogTrigger asChild>
-                <Button><Plus className="mr-2 w-4 h-4" />New Form</Button>
+            <DialogTrigger asChild className="h-full">
+                <Button variant={"outline"} className="h-[100px] flex flex-col items-center justify-around">
+                    <Plus className="mr-2" />
+                Empty Form</Button>
             </DialogTrigger>
             <DialogContent>
                 <DialogHeader>Create New Form</DialogHeader>
@@ -51,7 +53,7 @@ export default function CreateFormDialog() {
                         {isLoading ?
                             <Loader2Icon className="mr-2 w-4 h-4 animate-spin" /> : <PlusIcon className="mr-2 w-4 h-4" />
                         }
-                        New Form
+                        Create
                     </Button>
                 </DialogFooter>
             </DialogContent>

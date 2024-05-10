@@ -7,10 +7,11 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectSepa
 import { useContext, useState } from "react";
 import FormContext from "@/context/form-context";
 import { Button } from "../ui/button";
-import {  Circle, CircleDotIcon, CopyIcon, Notebook, NotepadText, Plus, Square, SquareCheck, Trash2, X } from "lucide-react";
+import { Circle, CircleDotIcon, CopyIcon, Notebook, NotepadText, Plus, Square, SquareCheck, Trash2, X } from "lucide-react";
 import { Switch } from "../ui/switch";
 import { Label } from "../ui/label";
 import { Separator } from "../ui/separator";
+import {  getRandomNumber } from "@/lib/utils";
 
 
 
@@ -24,34 +25,24 @@ export default function QuestionCard({ question, index, updateQuestion }: Props)
     const { setQuestions, formQuestions, setDeletedQuestions, deletedQuestions } = useContext(FormContext)
 
 
-    const deleteQuestion = (id: string) => {
 
-        let filtered = formQuestions.filter((question) => {
-            if (question.qid !== id) {
-                return question
-            }
-        })
 
-        setQuestions([...filtered])
 
-        setDeletedQuestions([...deletedQuestions, question])
-    }
-
-    const renderQuestionTypeIcon=()=>{
-        switch(question.type){
-            case "short":{
-                return <NotepadText className="w-4 h-4 mr-2"/>
+    const renderQuestionTypeIcon = () => {
+        switch (question.type) {
+            case "short": {
+                return <NotepadText className="w-4 h-4 mr-2" />
             }
-            case "long":{
-                return <Notebook className="w-4 h-4 mr-2"/>
+            case "long": {
+                return <Notebook className="w-4 h-4 mr-2" />
             }
-            case "multi":{
-                return <CircleDotIcon className="w-4 h-4 mr-2"/>
+            case "multi": {
+                return <CircleDotIcon className="w-4 h-4 mr-2" />
             }
-            case "checkbox":{
-                return <SquareCheck className="w-4 h-4 mr-2"/>
+            case "checkbox": {
+                return <SquareCheck className="w-4 h-4 mr-2" />
             }
-            default:{
+            default: {
                 return <></>
             }
         }
@@ -70,7 +61,7 @@ export default function QuestionCard({ question, index, updateQuestion }: Props)
                 )
             }
             case "multi":
-            case "checkbox":{
+            case "checkbox": {
                 return (
                     <div className="grid grid-cols-1 gap-4  p-2">
                         {
@@ -78,9 +69,9 @@ export default function QuestionCard({ question, index, updateQuestion }: Props)
                                 <div key={ind} className="flex items-center justify-between">
                                     <div className="flex items-center w-full">
                                         {
-                                            question.type==="multi"?<Circle className=" mr-2 w-6 h-6 text-gray-500"/>:<Square className="mr-2 w-6 h-6 text-gray-500"/>
+                                            question.type === "multi" ? <Circle className=" mr-2 w-6 h-6 text-gray-500" /> : <Square className="mr-2 w-6 h-6 text-gray-500" />
                                         }
-                                        
+
                                         <Input value={option} onChange={(e) => {
                                             question.options![ind] = e.target.value
                                             updateQuestion(question.qid, index, question)
@@ -108,9 +99,26 @@ export default function QuestionCard({ question, index, updateQuestion }: Props)
         }
     }
 
+    const deleteQuestion = (id: string) => {
+
+        let filtered = formQuestions.filter((question) => {
+            if (question.qid !== id) {
+                return question
+            }
+        })
+
+        setQuestions([...filtered])
+        setDeletedQuestions([...deletedQuestions, question])
+    }
+
     const deleteOption = (ind: number) => {
         question.options?.splice(ind, 1)
         updateQuestion(question.qid, index, question)
+    }
+    const copyQuestion=(ind:number)=>{
+        const newQuestion=question
+        formQuestions.splice(ind,0,{...newQuestion,qid:getRandomNumber(),id:""})
+        setQuestions([...formQuestions])
     }
 
     const addOption = () => {
@@ -125,7 +133,6 @@ export default function QuestionCard({ question, index, updateQuestion }: Props)
     const onQuestionTypeChange = (value: string) => {
         question.type = value as QuestionType
         question.options = []
-
         updateQuestion(question.qid, index, question)
     }
     return (
@@ -166,10 +173,10 @@ export default function QuestionCard({ question, index, updateQuestion }: Props)
                     <Switch checked={question.required} onCheckedChange={(checked) => {
                         question.required = checked
                         updateQuestion(question.qid, index, question)
-                    }}  />
+                    }} />
                 </div>
                 <div className="flex items-center items-center">
-                    <Button size={"icon"} variant={"ghost"}>
+                    <Button size={"icon"} variant={"ghost"} onClick={()=>copyQuestion(index)}>
                         <CopyIcon className="w-5 h-5" />
                     </Button>
                     <Separator className="w-[1px] mr-2 h-[20px] bg-primary" orientation="vertical" />

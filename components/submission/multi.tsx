@@ -17,7 +17,7 @@ export default function MultiAnswer({ question, answers, setAnswers }: Props) {
     const [index, setIndex] = useState<number>()
     const onSelect = (index: number) => {
         setIndex(index)
-        
+
         const newAnswers = answers.filter((ans) => ans.questionId !== question.id)
         setAnswers([...newAnswers, {
             questionId: question.id as string, name: question.name, value: [question.options?.at(index) as string], type: question.type,
@@ -28,7 +28,7 @@ export default function MultiAnswer({ question, answers, setAnswers }: Props) {
         <Card className="py-6 px-4">
             <CardHeader>
                 <CardTitle>
-                    {question.name}
+                    <span className="font-semibold text-md leading-3">{question.name}{question.required ? <span className="text-red-600">*</span> : <></>}</span>
                 </CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col gap-4">

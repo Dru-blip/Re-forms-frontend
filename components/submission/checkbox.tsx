@@ -19,19 +19,19 @@ export default function CheckboxAnswers({ question, answers, setAnswers }: Props
     const [selectedItems, setSelectedItems] = useState<number[]>([])
 
     const onSelect = (index: number) => {
-        let found=selectedItems.findIndex((i)=>i===index)
-        if(found!==-1){
-            selectedItems.splice(found,1)
+        let found = selectedItems.findIndex((i) => i === index)
+        if (found !== -1) {
+            selectedItems.splice(found, 1)
             setSelectedItems([...selectedItems])
-        }else{
+        } else {
             selectedItems.push(index)
             setSelectedItems([...selectedItems])
         }
 
-        let ans=selectedItems.map((item)=>{
+        let ans = selectedItems.map((item) => {
             return question.options?.at(item) as string
         })
-        
+
         const newAnswers = answers.filter((ans) => ans.questionId !== question.id)
         setAnswers([...newAnswers, {
             questionId: question.id as string, name: question.name, value: [...ans], type: question.type,
@@ -39,15 +39,15 @@ export default function CheckboxAnswers({ question, answers, setAnswers }: Props
         }])
     }
 
-    const isSelected=(index:number)=>{
-        return selectedItems.findIndex((i)=>i===index) !==-1 ? true : false
+    const isSelected = (index: number) => {
+        return selectedItems.findIndex((i) => i === index) !== -1 ? true : false
     }
-    
+
     return (
         <Card className="py-6 px-4">
             <CardHeader>
                 <CardTitle>
-                    {question.name}
+                    <span className="font-semibold text-md leading-3">{question.name}{question.required ? <span className="text-red-600">*</span> : <></>}</span>
                 </CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col gap-4">
@@ -57,7 +57,7 @@ export default function CheckboxAnswers({ question, answers, setAnswers }: Props
                         <div onClick={() => onSelect(optionIndex)} key={optionIndex} className={isSelected(optionIndex) ? "cursor-pointer bg-accent p-4 rounded-md flex items-center justify-between border-2 border-gray-500" : "cursor-pointer bg-accent p-4 rounded-md flex items-center justify-between"}>
                             <Label>{option}</Label>
                             {
-                                isSelected(optionIndex) ?<SquareCheck /> :<Square/>
+                                isSelected(optionIndex) ? <SquareCheck /> : <Square />
                             }
                             {/* <div className={isSelected(optionIndex) ? `border-[5px] w-5 h-5 border-black rounded` : "border w-5 h-5 rounded border-gray-900"}>
 

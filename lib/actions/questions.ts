@@ -40,7 +40,7 @@ export const createQuestions=async(formId:string,questions:IQuestion[],deletedQu
         })
         const res_data=await response.json()
         // console.log(res_data)
-        // revalidatePath(`/forms/${formId}/edit`)
+        revalidatePath(`/forms/${formId}/edit`)
         return {
             msg:"success",
             // data:res_data

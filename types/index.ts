@@ -28,6 +28,7 @@ interface IQuestion{
     name:string,
     type:QuestionType,
     options?:string[],
+    key?:string[],
     required:boolean,
     formId:string
 }
