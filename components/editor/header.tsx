@@ -4,12 +4,14 @@
 
 import Link from "next/link"
 import { Button } from "../ui/button"
-import { ArrowLeft, ChevronDown, Eye, Settings2Icon } from "lucide-react"
+import { ArrowLeft, ChevronDown, EllipsisVertical, Eye, MenuIcon, Settings2Icon } from "lucide-react"
 import { Label } from "../ui/label"
 import FormSaveButton from "./save-btn"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu"
 import { AngleIcon } from "@radix-ui/react-icons"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog"
+import { Card, CardDescription, CardHeader, CardTitle } from "../ui/card"
+import { Separator } from "../ui/separator"
 
 interface Props {
     id: string,
@@ -26,7 +28,7 @@ export default function EditPageHeader({ id, title }: Props) {
                 </Button>
                 <Label className="ml-2">Dashboard</Label>
             </Link>
-            <div className="flex ">
+            <div className="lg:flex hidden">
                 <Link href={"/dashboard"} className="hover:underline">Drafts/</Link>
                 <DropdownMenu>
                     <DropdownMenuTrigger>
@@ -47,27 +49,41 @@ export default function EditPageHeader({ id, title }: Props) {
                 </DropdownMenu>
 
             </div>
-            <div className="flex items-center">
-                <Dialog>
-                    <DialogTrigger asChild>
-                        <Button variant={"ghost"}>
-                            <Settings2Icon className="mr-2 w-4 h-4" />
-                            Settings
-                        </Button>
-                    </DialogTrigger>
-                    <DialogContent>
-                        <DialogHeader>
-                            <DialogTitle>Settings</DialogTitle>
-                        </DialogHeader>
-                        
-                    </DialogContent>
-                </Dialog>
-
+            <div className="lg:flex lg:items-center hidden">
+                <Link href={`/forms/${id}/edit/settings/general`}>
+                    <Button variant={"ghost"}>
+                        <Settings2Icon className="mr-2 w-4 h-4" />
+                        Settings
+                    </Button>
+                </Link>
                 <FormSaveButton />
                 <Link className="ml-2" target="_blank" href={`/forms/${id}/live`}>
                     <Button variant={"outline"}>Preview</Button>
                 </Link>
                 <Button className="ml-2">Share</Button>
+            </div>
+            <div className="lg:hidden">
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button size={"icon"} variant={"outline"}>
+                            <EllipsisVertical className="w-4 h-4" />
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="flex flex-col">
+
+                        <FormSaveButton />
+                        <DropdownMenuItem>
+                            <Link href={`/forms/${id}/edit/settings/general`} className="flex items-center">
+
+                                <Settings2Icon className="mr-2 w-4 h-4" />
+                                Settings
+
+                            </Link>
+                        </DropdownMenuItem>
+
+
+                    </DropdownMenuContent>
+                </DropdownMenu>
             </div>
         </div>
     )

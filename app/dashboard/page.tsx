@@ -11,7 +11,7 @@ export default async function Dashboard() {
             <div className="w-full bg-accent py-8">
                 <div className="container grid grid-cols-1 gap-4 items-center justify-start">
                     <h1 className="text-lg font-semibold">Start a new Form</h1>
-                    <div className="grid grid-cols-5">
+                    <div className="grid grid-cols-1 lg:grid-cols-5">
                         <CreateFormDialog />
                     </div>
                 </div>

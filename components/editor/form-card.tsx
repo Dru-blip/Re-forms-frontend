@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Label } from "../ui/label";
 import { format } from 'date-fns'
 import { Button } from "../ui/button";
-import { BanIcon, Copy, Edit2Icon, EllipsisVertical, Loader2Icon, LucideEye, Trash, Trash2, X } from "lucide-react";
+import { BanIcon, Copy, Edit2Icon, EllipsisVertical, Loader2Icon, LucideEye, Settings, Settings2Icon, Trash, Trash2, X } from "lucide-react";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "../ui/alert-dialog";
 import { useState } from "react";
 import { deleteForm } from "@/lib/actions/form";
@@ -51,6 +51,12 @@ export default function FormCard({ form }: Props) {
                 <Link href={`/forms/${form.id}/responses`}>
                     <Button variant={"ghost"} size={"icon"}>
                         <LucideEye className="w-5 h-5" />
+                    </Button>
+                </Link>
+
+                <Link href={`/forms/${form.id}/edit/settings/general`}>
+                    <Button variant={"ghost"} size={"icon"}>
+                        <Settings2Icon className="w-5 h-5" />
                     </Button>
                 </Link>
                 <AlertDialog>

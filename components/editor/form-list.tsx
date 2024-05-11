@@ -9,7 +9,7 @@ interface Props{
 
 export default function FormList({forms}:Props){
     return (
-        <div className="grid grid-cols-3 gap-5">
+        <div className="lg:grid lg:grid-cols-3 grid grid-cols-1 gap-4 lg:gap-5">
             {
                 forms.map((form,index)=>(
                     <FormCard form={form} key={index}/>
