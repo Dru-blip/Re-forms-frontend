@@ -50,7 +50,7 @@ export default function EditPageHeader({ id, title }: Props) {
 
             </div>
             <div className="lg:flex lg:items-center hidden">
-                <Link href={`/forms/${id}/edit/settings/general`}>
+                <Link href={`/forms/${id}/edit/settings/defaults`}>
                     <Button variant={"ghost"}>
                         <Settings2Icon className="mr-2 w-4 h-4" />
                         Settings
@@ -73,7 +73,7 @@ export default function EditPageHeader({ id, title }: Props) {
 
                         <FormSaveButton />
                         <DropdownMenuItem>
-                            <Link href={`/forms/${id}/edit/settings/general`} className="flex items-center">
+                            <Link href={`/forms/${id}/edit/settings/default`} className="flex items-center">
 
                                 <Settings2Icon className="mr-2 w-4 h-4" />
                                 Settings

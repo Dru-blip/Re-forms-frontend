@@ -12,14 +12,12 @@ export default function FormSaveButton() {
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const onClick=async ()=>{
         setIsLoading(true)
-        console.log({formQuestions,deletedQuestions})
         let res = await createQuestions(form.id, [...formQuestions],[...deletedQuestions])
         if (res.msg === "error") {
             toast.error("Error saving form")
         } else {
             toast.success("form saved")
         }
-        // console.log(questions)
         setIsLoading(false)
     }
     return (

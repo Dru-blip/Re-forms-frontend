@@ -22,12 +22,15 @@ export default async function Responses({ params }: { params: { id: string } }) 
 
     const getAnswersBySubmissions = async () => {
         let answers: any[] = []
-        for (let submission of submissions.data!) {
-            let answer: { date: Date, values: IAnswer[] } = { date: submission.date, values: [] }
-            let data = await getAnswers(params.id, submission.id as string)
-            answer.values = data.data!
-            answers.push(answer)
+        if (submissions.data?.length) {
+            for (let submission of submissions.data!) {
+                let answer: { date: Date, values: IAnswer[] } = { date: submission.date, values: [] }
+                let data = await getAnswers(params.id, submission.id as string)
+                answer.values = data.data!
+                answers.push(answer)
+            }
         }
+
         return answers
     }
 
@@ -47,11 +50,11 @@ export default async function Responses({ params }: { params: { id: string } }) 
                 <Card >
                     <CardHeader>
                         <CardTitle>
-                            Total submissions : {submissions.data?.length} 
+                            Total submissions : {submissions.data?.length}
                         </CardTitle>
                     </CardHeader>
                 </Card>
-                <DeleteResponseDialog formId={params.id}/>
+                <DeleteResponseDialog formId={params.id} />
             </div>
 
             <Tabs defaultValue="table" className="container">
@@ -61,7 +64,6 @@ export default async function Responses({ params }: { params: { id: string } }) 
                 </TabsList>
                 <TabsContent value="table">
                     <ResponseTable header={questions.data as IQuestion[]} responses={answers as { date: Date, values: IAnswer[] }[]} />
-                    {/* <FormResponses submissions={data.data! as ISubmission[]} responses={answers as { date: Date, values: IAnswer[] }[]} header={questions.data as IQuestion[]} /> */}
                 </TabsContent>
                 <TabsContent value="summary">
                     <Summary id={params.id} />

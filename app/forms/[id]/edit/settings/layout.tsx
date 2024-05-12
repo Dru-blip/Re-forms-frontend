@@ -23,7 +23,6 @@ export default async function SettingsLayout({
 
             <div className="flex flex-col lg:flex-row">
                 <nav className="w-[200px] h-[50px] flex items-center mb-2 lg:grid lg:grid-cols-1 lg:gap-4 text-md text-muted-foreground mt-4">
-                    <LinkCard href={`/forms/${params.id}/edit/settings/general`} name={"General"} />
                     <LinkCard href={`/forms/${params.id}/edit/settings/defaults`} name={"Defaults"} />
                     <LinkCard href={`/forms/${params.id}/edit/settings/responses`} name={"Responses"} />
                 </nav>

@@ -6,6 +6,7 @@ import { getAllForms } from "@/lib/actions/form";
 
 export default async function Dashboard() {
     const forms = await getAllForms()
+    
     return (
         <div className="grid grid-cols-1 gap-4 w-full">
             <div className="w-full bg-accent py-8">

@@ -54,7 +54,7 @@ export default function FormCard({ form }: Props) {
                     </Button>
                 </Link>
 
-                <Link href={`/forms/${form.id}/edit/settings/general`}>
+                <Link href={`/forms/${form.id}/edit/settings/defaults`}>
                     <Button variant={"ghost"} size={"icon"}>
                         <Settings2Icon className="w-5 h-5" />
                     </Button>

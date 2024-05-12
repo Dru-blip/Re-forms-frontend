@@ -1,14 +1,12 @@
-import { Card } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
+import DefaultSettings from "@/components/settings/default-settings";
+import { getSetting } from "@/lib/actions/settings";
 
 
 
-export default function Defaults(){
+export default async function Defaults({ params }: { params: { id: string } }) {
+    const settings = await getSetting(params.id)
+
     return (
-        <Card>
-            <Switch />
-            <Label>Make Questions Required by default</Label>
-        </Card>
+        <DefaultSettings  setting={settings.data!} />
     )
 }

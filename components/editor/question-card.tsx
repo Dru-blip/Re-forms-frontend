@@ -11,7 +11,7 @@ import { Circle, CircleDotIcon, CopyIcon, Notebook, NotepadText, Plus, Square, S
 import { Switch } from "../ui/switch";
 import { Label } from "../ui/label";
 import { Separator } from "../ui/separator";
-import {  getRandomNumber } from "@/lib/utils";
+import { getRandomNumber } from "@/lib/utils";
 
 
 
@@ -23,10 +23,6 @@ interface Props {
 
 export default function QuestionCard({ question, index, updateQuestion }: Props) {
     const { setQuestions, formQuestions, setDeletedQuestions, deletedQuestions } = useContext(FormContext)
-
-
-
-
 
     const renderQuestionTypeIcon = () => {
         switch (question.type) {
@@ -50,14 +46,10 @@ export default function QuestionCard({ question, index, updateQuestion }: Props)
 
     const renderQuestion = () => {
         switch (question.type) {
-            case "short": {
-                return (
-                    <div className="bg-accent rounded-md p-3">Short answer Here</div>
-                )
-            }
+            case "short":
             case "long": {
                 return (
-                    <div className="bg-accent rounded-md p-3">Long answer Here</div>
+                    <div className="bg-accent rounded-md p-3">{question.type} answer here</div>
                 )
             }
             case "multi":
@@ -115,9 +107,9 @@ export default function QuestionCard({ question, index, updateQuestion }: Props)
         question.options?.splice(ind, 1)
         updateQuestion(question.qid, index, question)
     }
-    const copyQuestion=(ind:number)=>{
-        const newQuestion=question
-        formQuestions.splice(ind,0,{...newQuestion,qid:getRandomNumber(),id:""})
+    const copyQuestion = (ind: number) => {
+        const newQuestion = question
+        formQuestions.splice(ind, 0, { ...newQuestion, qid: getRandomNumber(), id: "" })
         setQuestions([...formQuestions])
     }
 
@@ -135,6 +127,7 @@ export default function QuestionCard({ question, index, updateQuestion }: Props)
         question.options = []
         updateQuestion(question.qid, index, question)
     }
+    
     return (
         <Card >
             <CardHeader className="grid grid-cols-1 gap-3 items-baseline">
@@ -176,7 +169,7 @@ export default function QuestionCard({ question, index, updateQuestion }: Props)
                     }} />
                 </div>
                 <div className="flex items-center items-center">
-                    <Button size={"icon"} variant={"ghost"} onClick={()=>copyQuestion(index)}>
+                    <Button size={"icon"} variant={"ghost"} onClick={() => copyQuestion(index)}>
                         <CopyIcon className="w-5 h-5" />
                     </Button>
                     <Separator className="w-[1px] mr-2 h-[20px] bg-primary" orientation="vertical" />

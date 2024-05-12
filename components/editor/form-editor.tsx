@@ -1,10 +1,8 @@
-
-
 "use client"
 
 import { Loader2Icon, Plus, SaveIcon } from "lucide-react"
 import { Button } from "../ui/button"
-import { IForm, IQuestion } from "@/types"
+import { IForm, IQuestion, ISettings } from "@/types"
 import { useContext, useEffect, useState } from "react"
 import QuestionCard from "./question-card"
 import { Reorder } from "framer-motion"
@@ -19,19 +17,21 @@ import { getRandomNumber } from "@/lib/utils"
 interface Props {
     formData: IForm,
     questions: IQuestion[]
+    setting:ISettings
 }
 
-export default function FormEditor({ formData, questions }: Props) {
-    const { formQuestions, setQuestions } = useContext(FormContext)
+export default function FormEditor({ formData, questions ,setting}: Props) {
+    const { formQuestions, setQuestions,setSettings } = useContext(FormContext)
 
     useEffect(() => {
         setQuestions(questions)
-        console.log("updated")
+        setSettings(setting)
+        console.log(setting)
     }, [])
 
     const addQuestion = () => {
         const qid = getRandomNumber()
-        formQuestions.push({ qid: qid, name: "", type: "short", formId: formData.id, options: [], required: false })
+        formQuestions.push({ qid: qid, name: "", type: "short", formId: formData.id, options: [], required:setting.questionsRequiredDefault })
         setQuestions([...formQuestions])
     }
 
@@ -46,9 +46,7 @@ export default function FormEditor({ formData, questions }: Props) {
             <div className="grid grid-cols-1 gap-4">
                 {
                     formQuestions.map((val, index) => (
-                        // <Reorder.Item key={val.qid} value={val}>
                         <QuestionCard key={val.qid} index={index} question={val} updateQuestion={updateQuestion} />
-                        // </Reorder.Item>
                     ))
                 }
             </div>
@@ -57,12 +55,6 @@ export default function FormEditor({ formData, questions }: Props) {
     }
     return (
         <div className="container py-8 grid grid-cols-1 gap-4">
-            {/* <Card className="flex flex-col justify-between py-8 container">
-                <Label>Form Title</Label>
-                <Input value={formData.title} onChange={(e)=>{
-
-                }}/>
-            </Card> */}
             <div >
                 {
                     questions ? renderQuestions() : <></>

@@ -50,14 +50,25 @@ interface ISubmission{
     formId:string
 }
 
+interface ISettings{
+    id:string
+    confirmationMessage:string
+    responseLimit:number
+    editResponse:boolean
+    questionsRequiredDefault:boolean,
+    anotherResponse:boolean,
+    formId:string
+}
+
 interface FormContextProps{
     form:IForm,
     setForm:React.Dispatch<React.SetStateAction<IForm>>,
     formQuestions:IQuestion[]
-    // qorder:number[]
     setQuestions:React.Dispatch<React.SetStateAction<IQuestion[]>>
     deletedQuestions:IQuestion[]
-    setDeletedQuestions:React.Dispatch<React.SetStateAction<IQuestion[]>>
+    setDeletedQuestions:React.Dispatch<React.SetStateAction<IQuestion[]>>,
+    settings:ISettings,
+    setSettings:React.Dispatch<React.SetStateAction<ISettings>>
 }
 
-export  type {IForm,IQuestion,FormContextProps,ApiResponse,QuestionType,IAnswer,ISubmission}
+export  type {IForm,IQuestion,FormContextProps,ApiResponse,QuestionType,IAnswer,ISubmission,ISettings}

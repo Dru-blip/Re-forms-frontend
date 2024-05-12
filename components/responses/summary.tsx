@@ -14,29 +14,32 @@ export default async function Summary({ id }: { id: string }) {
 
     const getAnswers = async () => {
         let answers: QuestionAnswer = []
-        for (let question of questions.data!) {
-            let answer: { question: IQuestion, values: IAnswer[] } = { question, values: [] }
-            let data = await getAnswersByQuestion(id, question.id as string)
-            answer.values = data.data!
-            answers.push(answer)
+        if (questions.data?.length) {
+            for (let question of questions.data!) {
+                let answer: { question: IQuestion, values: IAnswer[] } = { question, values: [] }
+                let data = await getAnswersByQuestion(id, question.id as string)
+                answer.values = data.data!
+                answers.push(answer)
+            }
         }
+
         return answers
     }
     let answers = await getAnswers()
 
-    const renderQuestionSummary=(question:IQuestion,values:IAnswer[])=>{
-        switch(question.type){
+    const renderQuestionSummary = (question: IQuestion, values: IAnswer[]) => {
+        switch (question.type) {
             case "short":
-            case "long":{
-               return values ? values.map((value, ind) => (
+            case "long": {
+                return values ? values.map((value, ind) => (
                     <div className="bg-accent p-2 rounded-md" key={ind}>{value.value?.join(",")}</div>
                 )) : <></>
             }
-            case "multi":{
-                return <PieChartComponent options={question.options!} values={values}/>
+            case "multi": {
+                return <PieChartComponent options={question.options!} values={values} />
             }
-            case "checkbox":{
-                return <BarChartComponent options={question.options!} values={values}/>
+            case "checkbox": {
+                return <BarChartComponent options={question.options!} values={values} />
             }
         }
     }
@@ -58,7 +61,7 @@ export default async function Summary({ id }: { id: string }) {
                         </CardHeader>
                         <CardContent className="grid grid-cols-1 gap-2">
                             {
-                                renderQuestionSummary(question,values)
+                                renderQuestionSummary(question, values)
                             }
                         </CardContent>
                     </Card>

@@ -1,11 +1,10 @@
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
+import { Button } from "../ui/button";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card";
+import { Input } from "../ui/input";
+import { Separator } from "../ui/separator";
 
 
-export default function General() {
+export default function SettingsGeneral() {
     return (
         <div className="grid grid-cols-1 gap-3">
             <Card>

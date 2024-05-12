@@ -59,9 +59,7 @@ export default function CheckboxAnswers({ question, answers, setAnswers }: Props
                             {
                                 isSelected(optionIndex) ? <SquareCheck /> : <Square />
                             }
-                            {/* <div className={isSelected(optionIndex) ? `border-[5px] w-5 h-5 border-black rounded` : "border w-5 h-5 rounded border-gray-900"}>
-
-                            </div> */}
+                           
                         </div>
                     )) : <></>
                 }
