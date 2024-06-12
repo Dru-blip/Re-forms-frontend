@@ -27,6 +27,31 @@ export const getQuestions=async (formId:string):Promise<ApiResponse<IQuestion[]>
     }
 }
 
+export const createQuestion=async (formId:string,question:IQuestion):Promise<ApiResponse<IQuestion>> =>{
+    const token=cookies().get("token")?.value
+    try{
+        const response=await fetch(process.env.BASE_API+`/forms/${formId}/question`,{
+            method:"POST",
+            headers:{
+                "Content-type":"application/json",
+                "Authorization":`Bearer ${token}`
+            },
+            body:JSON.stringify({question})
+        })
+
+        const res_data=await response.json()
+        return {
+            msg:"success",
+            data:res_data
+        }
+        
+    }catch{
+        return {
+            msg:"error"
+        }
+    }
+}
+
 export const createQuestions=async(formId:string,questions:IQuestion[],deletedQuestions:IQuestion[]):Promise<ApiResponse<IQuestion[]>> =>{
     const token=cookies().get("token")?.value
     try {

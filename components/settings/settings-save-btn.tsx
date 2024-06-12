@@ -14,6 +14,7 @@ export default function SaveSettingsButton(){
     const {settings}=useContext(FormContext)
     const onClick=async ()=>{
         setIsLoading(true)
+        console.log(settings)
         const res=await saveSettings(settings.formId,settings.id,settings)
         if(res.msg==="success"){
             toast("settings updated")

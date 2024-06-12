@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import { createSubmission } from "@/lib/actions/form";
 import { Loader2Icon } from "lucide-react";
 import CheckboxAnswers from "./checkbox";
+import { useRouter } from "next/navigation";
 
 
 interface Props {
@@ -25,18 +26,16 @@ export default function FormSubmission({ form, questions }: Props) {
     const [answers, setAnswers] = useState<IAnswer[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
+    const router=useRouter()
+
 
     const onSumbit = async (e:any) => {
         e.preventDefault()
         setIsLoading(true)
 
-
-        // let submission = { formId: form.id, response: JSON.stringify(answers) }
-        // console.log(answers)
-        console.log(answers)
         const res = await createSubmission(form.id, answers)
         if (res.msg === "success") {
-            
+            router.push(`/forms/${form.id}/responses/${res.data?.id}/formResponse`)
         }
         setIsLoading(false)
     }

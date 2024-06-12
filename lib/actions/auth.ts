@@ -2,7 +2,7 @@
 
 import { cookies } from "next/headers"
 import { z } from "zod"
-import { userLoginSchema,userRegisterSchema } from "../form-validation"
+import { userRegisterSchema } from "../form-validation"
 
 
 export const registerFormAction=async(values: z.infer<typeof userRegisterSchema>)=>{
@@ -28,7 +28,7 @@ export const registerFormAction=async(values: z.infer<typeof userRegisterSchema>
             }
         }
 
-        console.log(data)
+        
         
         return {
             msg:"error"
@@ -41,9 +41,9 @@ export const registerFormAction=async(values: z.infer<typeof userRegisterSchema>
     }
 }
 
-export const loginFormAction = async (values: z.infer<typeof userLoginSchema>) => {
+export const loginFormAction = async (email:string,password:string) => {
 
-    const user = { ...values }
+    const user = {email,password}
 
     try {
         const res = await fetch(process.env.AUTH_API_URL + '/login', {
@@ -61,7 +61,7 @@ export const loginFormAction = async (values: z.infer<typeof userLoginSchema>) =
                 cookies().set("token", data.token)
             }
             return {
-                msg: "success"
+                msg: data.msg
             }
         }
         return {
@@ -74,4 +74,9 @@ export const loginFormAction = async (values: z.infer<typeof userLoginSchema>) =
         }
     }
 
+}
+
+
+export const logout=async ()=>{
+    cookies().delete("token");
 }

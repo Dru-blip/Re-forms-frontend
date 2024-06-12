@@ -25,6 +25,7 @@ export default function ResponseSettings({setting}:{setting:ISettings}) {
                         setSettings({...settings,editResponse:change})
                     }}/>
                 </div>
+                <p></p>
 
             </CardContent>
             <Separator />

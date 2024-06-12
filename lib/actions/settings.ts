@@ -1,6 +1,7 @@
 "use server"
 
 import { ApiResponse, ISettings } from "@/types"
+import { revalidatePath } from "next/cache"
 import { cookies } from "next/headers"
 
 
@@ -39,7 +40,8 @@ export const saveSettings=async (formId:string,settingId:string,setting:ISetting
             body:JSON.stringify({setting})
         })
         const res_data=await response.json()
-        
+        revalidatePath(`/forms/${formId}/edit/settings/defaults`)
+        revalidatePath(`/forms/${formId}/edit/settings/responses`)
         return {
             msg:"success",
             data:res_data.setting

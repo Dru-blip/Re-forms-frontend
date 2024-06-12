@@ -5,70 +5,64 @@ import { loginFormAction } from "@/lib/actions/auth"
 import { Input } from "../ui/input"
 import { Button } from "../ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../ui/card"
-import { Form, FormControl, FormField, FormItem, FormLabel } from "../ui/form"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
-import { userLoginSchema } from "@/lib/form-validation"
-import { zodResolver } from "@hookform/resolvers/zod"
-
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { useState } from "react"
+import { Loader2Icon } from "lucide-react"
 
 export default function LoginForm() {
-    const router=useRouter()
-    const form = useForm<z.infer<typeof userLoginSchema>>({
-        resolver: zodResolver(userLoginSchema),
-        defaultValues: {
-            email: "",
-            password: ""
-        }
-    })
+    const [email, setEmail] = useState<string>("")
+    const [password, setPassword] = useState<string>("")
+    const [message, setMessage] = useState<string>("")
+    const [isLoading, setIsLoading] = useState<boolean>(false)
 
-    const onSubmit = async (values: z.infer<typeof userLoginSchema>) => {
-        const res = await loginFormAction(values)
-        if (res.msg === "success") {
-            router.push('/')
+    const router = useRouter()
+
+    const onSubmit = async (e: any) => {
+        e.preventDefault()
+        setIsLoading(true)
+        const res = await loginFormAction(email, password)
+        console.log(res)
+        if (res.msg !== "error") {
+            router.push('/dashboard')
         }
+        setMessage(res.msg)
+
+        setIsLoading(false)
     }
 
     return (
-        <Card className="w-full max-w-sm">
-            <CardHeader>
-                <CardTitle className="text-2xl">Login</CardTitle>
-                <CardDescription>
-                    Enter your email below to login to your account.
-                </CardDescription>
-            </CardHeader>
-            <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)}>
+        <div className="grid grid-cols-1 gap-5">
+            {
+                message ? <div className="bg-accent p-2 rounded-md">
+                            <h1 className="text-lg text-red-700">{message}</h1>
+                        </div>
+                    : <></>
+            }
+
+            <Card className="w-full max-w-sm">
+                <CardHeader>
+                    <CardTitle className="text-2xl">Login</CardTitle>
+                    <CardDescription>
+                        Enter your email below to login to your account.
+                    </CardDescription>
+                </CardHeader>
+                <form onSubmit={onSubmit}>
                     <CardContent className="grid gap-4">
-                        <FormField
-                            control={form.control}
-                            name="email"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Email</FormLabel>
-                                    <FormControl>
-                                        <Input placeholder="m@example.com" {...field} />
-                                    </FormControl>
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="password"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Password</FormLabel>
-                                    <FormControl>
-                                        <Input type="password"  {...field} />
-                                    </FormControl>
-                                </FormItem>
-                            )}
-                        />
+                        <Input placeholder="m@example.com" required onChange={(e) => {
+                            setEmail(e.target.value)
+                        }} />
+                        <Input type="password" placeholder="password" required onChange={(e) => {
+                            setPassword(e.target.value)
+                        }} />
                     </CardContent>
                     <CardFooter className="flex flex-col">
-                        <Button type="submit" className="w-full">Sign in</Button>
+                        <Button type="submit" className="w-full" disabled={isLoading}>
+                            {
+                                isLoading ? <Loader2Icon className="mr-2 w-4 h-4 animate-spin" /> : <></>
+                            }
+                            Sign in
+                        </Button>
                         <div className="mt-4 text-center text-sm">
                             Don&apos;t have an account?{" "}
                             <Link href="/register" className="underline">
@@ -77,8 +71,7 @@ export default function LoginForm() {
                         </div>
                     </CardFooter>
                 </form>
-            </Form>
-        </Card>
-
+            </Card>
+        </div>
     )
 }

@@ -5,12 +5,11 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Label } from "../ui/label";
 import { format } from 'date-fns'
 import { Button } from "../ui/button";
-import { BanIcon, Copy, Edit2Icon, EllipsisVertical, Loader2Icon, LucideEye, Settings, Settings2Icon, Trash, Trash2, X } from "lucide-react";
+import { BanIcon, Edit2Icon, Loader2Icon, LucideEye, Settings2Icon, Trash, Trash2,  } from "lucide-react";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "../ui/alert-dialog";
 import { useState } from "react";
 import { deleteForm } from "@/lib/actions/form";
 import Link from "next/link";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
 import { Separator } from "../ui/separator";
 
 interface Props {
@@ -22,9 +21,6 @@ export default function FormCard({ form }: Props) {
     const onClick = async () => {
         setIsLoading(true)
         const response = await deleteForm(form.id)
-        //  if(response.data){
-
-        //  }
         setIsLoading(false)
     }
     return (
@@ -45,9 +41,6 @@ export default function FormCard({ form }: Props) {
                         <Edit2Icon className="w-5 h-5" />
                     </Button>
                 </Link>
-                <Button variant={"ghost"} size={"icon"}>
-                    <Copy className="w-5 h-5"/>
-                </Button>
                 <Link href={`/forms/${form.id}/responses`}>
                     <Button variant={"ghost"} size={"icon"}>
                         <LucideEye className="w-5 h-5" />
