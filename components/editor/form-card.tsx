@@ -71,7 +71,7 @@ export default function FormCard({ form }: Props) {
                             <AlertDialogAction className="bg-destructive" disabled={isLoading} onClick={onClick}>
                                 {
 
-                                    isLoading ? <Loader2Icon className="mr-2 w-4 h-4" /> : <Trash2 className="mr-2 w-4 h-4" />
+                                    isLoading ? <Loader2Icon className="mr-2 w-4 h-4 animate-spin" /> : <Trash2 className="mr-2 w-4 h-4" />
                                 }
                                 Delete
                             </AlertDialogAction>

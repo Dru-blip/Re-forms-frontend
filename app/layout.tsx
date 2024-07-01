@@ -23,8 +23,7 @@ export default function RootLayout({
       <body className={poppins.className}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="dark"
-         
+          defaultTheme="light"
         >
           <div className="grid grid-cols-1">
             {/* <Header/> */}

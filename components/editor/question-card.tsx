@@ -12,6 +12,7 @@ import { Switch } from "../ui/switch";
 import { Label } from "../ui/label";
 import { Separator } from "../ui/separator";
 import { getRandomNumber } from "@/lib/utils";
+import * as actions from "@/lib/actions/questions"
 
 
 
@@ -91,13 +92,14 @@ export default function QuestionCard({ question, index, updateQuestion }: Props)
         }
     }
 
-    const deleteQuestion = (id: string) => {
-
+    const deleteQuestion = async (id: string) => {
         let filtered = formQuestions.filter((question) => {
             if (question.qid !== id) {
                 return question
             }
         })
+
+        await actions.deleteQuestion(question.formId,id)
 
         setQuestions([...filtered])
         setDeletedQuestions([...deletedQuestions, question])
@@ -174,7 +176,7 @@ export default function QuestionCard({ question, index, updateQuestion }: Props)
                     </Button>
                     <Separator className="w-[1px] mr-2 h-[20px] bg-primary" orientation="vertical" />
 
-                    <Button size={"icon"} variant={"ghost"} onClick={() => deleteQuestion(question.qid)}>
+                    <Button size={"icon"} variant={"ghost"} onClick={async () => await deleteQuestion(question.qid)}>
                         <Trash2 className="w-4 h-4" />
                     </Button>
                 </div>

@@ -2,8 +2,6 @@ import { format } from "date-fns"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table"
 import { IAnswer, IQuestion, ISubmission } from "@/types"
 
-
-
 interface Props {
     responses: {date:Date,values:IAnswer[]}[],
     header:IQuestion[]

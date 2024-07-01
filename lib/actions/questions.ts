@@ -27,6 +27,55 @@ export const getQuestions=async (formId:string):Promise<ApiResponse<IQuestion[]>
     }
 }
 
+export const updateQuestion=async (formId:string,question:IQuestion):Promise<ApiResponse<IQuestion>> =>{
+    const token=cookies().get("token")?.value
+    try{
+        const response=await fetch(process.env.BASE_API+`/forms/${formId}/question`,{
+            method:"PUT",
+            headers:{
+                "Content-type":"application/json",
+                "Authorization":`Bearer ${token}`
+            },
+            body:JSON.stringify({question})
+        })
+
+        const res_data=await response.json()
+        return {
+            msg:"success",
+            data:res_data
+        }
+        
+    }catch{
+        return {
+            msg:"error"
+        }
+    }
+}
+
+export const deleteQuestion=async (formId:string,questionId:string):Promise<ApiResponse<IQuestion>> =>{
+    const token=cookies().get("token")?.value
+    try{
+        const response=await fetch(process.env.BASE_API+`/forms/${formId}/question`,{
+            method:"DELETE",
+            headers:{
+                "Content-type":"application/json",
+                "Authorization":`Bearer ${token}`
+            },
+        })
+
+        const res_data=await response.json()
+        return {
+            msg:"success",
+            data:res_data
+        }
+        
+    }catch{
+        return {
+            msg:"error"
+        }
+    }
+}
+
 export const createQuestion=async (formId:string,question:IQuestion):Promise<ApiResponse<IQuestion>> =>{
     const token=cookies().get("token")?.value
     try{
