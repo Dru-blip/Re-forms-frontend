@@ -56,7 +56,7 @@ export default function EditPageHeader({ id, title }: Props) {
                         Settings
                     </Button>
                 </Link>
-                <FormSaveButton />
+                {/* <FormSaveButton /> */}
                 <Link className="ml-2" target="_blank" href={`/forms/${id}/live`}>
                     <Button variant={"outline"}>Preview</Button>
                 </Link>

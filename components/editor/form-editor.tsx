@@ -5,7 +5,7 @@ import { Button } from "../ui/button"
 import { IForm, IQuestion, ISettings } from "@/types"
 import { useContext, useEffect, useState } from "react"
 import QuestionCard from "./question-card"
-import { createQuestion, createQuestions } from "@/lib/actions/questions"
+import * as actions  from "@/lib/actions/questions"
 import { toast } from "sonner"
 import FormContext from "@/context/form-context"
 import { Card } from "../ui/card"
@@ -31,7 +31,7 @@ export default function FormEditor({ formData, questions ,setting}: Props) {
         const qid = getRandomNumber()
         let new_q:IQuestion={ qid: qid, name: "", type: "short", formId: formData.id, options: [], required:setting.questionsRequiredDefault }
         
-        let data=await createQuestion(formData.id,new_q)
+        let data=await actions.createQuestion(formData.id,new_q)
         if(data.msg==='success'){
             formQuestions.push(data.data!)
             setQuestions([...formQuestions])
@@ -40,9 +40,15 @@ export default function FormEditor({ formData, questions ,setting}: Props) {
     }
 
 
-    const updateQuestion = (id: string, index: number, question: IQuestion) => {
+    const updateQuestion = async (id: string, index: number, question: IQuestion) => {
         formQuestions[index] = question
         setQuestions([...formQuestions])
+        let data=await actions.updateQuestion(question.formId,question)
+        if(data.msg==="success"){
+            console.log(data.data)
+        }
+        
+        
     }
 
     const renderQuestions = () => {

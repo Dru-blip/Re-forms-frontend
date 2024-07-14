@@ -15,7 +15,7 @@ export const getQuestions=async (formId:string):Promise<ApiResponse<IQuestion[]>
             },
         })
         const data=await response.json()
-        // console.log(data)
+        
         return {
             msg:"success",
             data:data.questions
@@ -30,7 +30,7 @@ export const getQuestions=async (formId:string):Promise<ApiResponse<IQuestion[]>
 export const updateQuestion=async (formId:string,question:IQuestion):Promise<ApiResponse<IQuestion>> =>{
     const token=cookies().get("token")?.value
     try{
-        const response=await fetch(process.env.BASE_API+`/forms/${formId}/question`,{
+        const response=await fetch(process.env.BASE_API+`/forms/${formId}/question/${question.id}`,{
             method:"PUT",
             headers:{
                 "Content-type":"application/json",
@@ -45,7 +45,8 @@ export const updateQuestion=async (formId:string,question:IQuestion):Promise<Api
             data:res_data
         }
         
-    }catch{
+    }catch(e){
+        
         return {
             msg:"error"
         }
@@ -55,7 +56,7 @@ export const updateQuestion=async (formId:string,question:IQuestion):Promise<Api
 export const deleteQuestion=async (formId:string,questionId:string):Promise<ApiResponse<IQuestion>> =>{
     const token=cookies().get("token")?.value
     try{
-        const response=await fetch(process.env.BASE_API+`/forms/${formId}/question`,{
+        const response=await fetch(process.env.BASE_API+`/forms/${formId}/question/${questionId}`,{
             method:"DELETE",
             headers:{
                 "Content-type":"application/json",
@@ -79,13 +80,16 @@ export const deleteQuestion=async (formId:string,questionId:string):Promise<ApiR
 export const createQuestion=async (formId:string,question:IQuestion):Promise<ApiResponse<IQuestion>> =>{
     const token=cookies().get("token")?.value
     try{
+        
+        let {id,...data}={...question}
+        
         const response=await fetch(process.env.BASE_API+`/forms/${formId}/question`,{
             method:"POST",
             headers:{
                 "Content-type":"application/json",
                 "Authorization":`Bearer ${token}`
             },
-            body:JSON.stringify({question})
+            body:JSON.stringify({question:data})
         })
 
         const res_data=await response.json()

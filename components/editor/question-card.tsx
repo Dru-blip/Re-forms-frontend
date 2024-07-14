@@ -25,6 +25,49 @@ interface Props {
 export default function QuestionCard({ question, index, updateQuestion }: Props) {
     const { setQuestions, formQuestions, setDeletedQuestions, deletedQuestions } = useContext(FormContext)
 
+   
+    const deleteQuestion = async (id: string) => {
+        let filtered = formQuestions.filter((question) => {
+            if (question.qid !== id) {
+                return question
+            }
+        })
+
+        let data=await actions.deleteQuestion(question.formId,question.id!)
+        console.log(data)
+        setQuestions([...filtered])
+        setDeletedQuestions([...deletedQuestions, question])
+    }
+
+    const deleteOption = (ind: number) => {
+        question.options?.splice(ind, 1)
+        updateQuestion(question.qid, index, question)
+    }
+
+    const copyQuestion = async (ind: number) => {
+        const newQuestion = {...question,qid: getRandomNumber(), id:""}
+        formQuestions.splice(ind, 0, newQuestion)
+        setQuestions([...formQuestions])
+        let data=await actions.createQuestion(question.formId,newQuestion)
+        console.log(data)
+    }
+
+    const addOption = () => {
+        if (question.options) {
+            question.options.push(`Option ${question.options.length + 1}`)
+        } else {
+            question.options = [`Option 1`]
+        }
+        updateQuestion(question.qid, index, question)
+    }
+
+    const onQuestionTypeChange = async (value: string) => {
+        question.type = value as QuestionType
+        question.options = []
+        updateQuestion(question.qid, index, question)
+    }
+
+
     const renderQuestionTypeIcon = () => {
         switch (question.type) {
             case "short": {
@@ -65,7 +108,7 @@ export default function QuestionCard({ question, index, updateQuestion }: Props)
                                             question.type === "multi" ? <Circle className=" mr-2 w-6 h-6 text-gray-500" /> : <Square className="mr-2 w-6 h-6 text-gray-500" />
                                         }
 
-                                        <Input value={option} onChange={(e) => {
+                                        <Input value={option} onChange={async (e) => {
                                             question.options![ind] = e.target.value
                                             updateQuestion(question.qid, index, question)
                                         }} />
@@ -92,43 +135,6 @@ export default function QuestionCard({ question, index, updateQuestion }: Props)
         }
     }
 
-    const deleteQuestion = async (id: string) => {
-        let filtered = formQuestions.filter((question) => {
-            if (question.qid !== id) {
-                return question
-            }
-        })
-
-        await actions.deleteQuestion(question.formId,id)
-
-        setQuestions([...filtered])
-        setDeletedQuestions([...deletedQuestions, question])
-    }
-
-    const deleteOption = (ind: number) => {
-        question.options?.splice(ind, 1)
-        updateQuestion(question.qid, index, question)
-    }
-    const copyQuestion = (ind: number) => {
-        const newQuestion = question
-        formQuestions.splice(ind, 0, { ...newQuestion, qid: getRandomNumber(), id: "" })
-        setQuestions([...formQuestions])
-    }
-
-    const addOption = () => {
-        if (question.options) {
-            question.options.push(`Option ${question.options.length + 1}`)
-        } else {
-            question.options = [`Option 1`]
-        }
-        updateQuestion(question.qid, index, question)
-    }
-
-    const onQuestionTypeChange = (value: string) => {
-        question.type = value as QuestionType
-        question.options = []
-        updateQuestion(question.qid, index, question)
-    }
     
     return (
         <Card >
