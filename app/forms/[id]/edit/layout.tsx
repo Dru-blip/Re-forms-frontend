@@ -1,5 +1,23 @@
 import EditPageHeader from "@/components/editor/header"
-import { getForm } from "@/lib/actions/form"
+import { ApiResponse, Form } from "@/types"
+import { cookies } from "next/headers"
+
+
+async function fetchForm(id: string) :Promise<Form|null>{
+    const token=cookies().get("token")!
+    try{
+        const response=await fetch(process.env.BASE_API+"/forms",{
+            headers:{
+                "Content-type":"application/json",
+                "Authorization":`Bearer ${token.value}`
+            },
+        })
+        const responseData:ApiResponse<Form>=await response.json()
+        return responseData.data
+    }catch(err){
+        return null
+    }
+}
 
 
 export default async function FormLayout({
@@ -11,10 +29,10 @@ export default async function FormLayout({
         id:string
     }
 }) {
-    const form=await getForm(params.id)
+    const form=await fetchForm(params.id)
     return (
         <section>
-            <EditPageHeader id={params.id} title={form.data?.title!}/>
+            <EditPageHeader id={params.id} title={form?.title!}/>
             {children}
         </section>
     )

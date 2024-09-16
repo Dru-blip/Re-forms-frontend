@@ -22,12 +22,10 @@ export default function LoginForm() {
         e.preventDefault()
         setIsLoading(true)
         const res = await loginFormAction(email, password)
-        console.log(res)
-        if (res.msg !== "error") {
+        if (res.msg === "success") {
             router.push('/dashboard')
         }
         setMessage(res.msg)
-
         setIsLoading(false)
     }
 

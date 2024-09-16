@@ -4,7 +4,7 @@
 
 import { useState } from "react"
 // import FormContext from "@/context/form-context"
-import { IForm } from "@/types"
+import { Form } from "@/types"
 import { Button } from "./ui/button"
 import { Loader2Icon, PlusIcon } from "lucide-react"
 import { createForm } from "@/lib/actions/form"
@@ -17,15 +17,8 @@ export default function CreateFormButton() {
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const onClick = async () => {
         setIsLoading(true)
-        const newForm: IForm = {
-            id: "",
-            title: "Untitled Form",
-            description: "",
-            fields: JSON.stringify([]),
-            questions: []
-        }
         // setForms([...forms, newForm])
-        const form=await createForm(newForm)
+        const form=await createForm()
         
         if(form.data){
             router.push(`/forms/${form.data.id}/edit`)

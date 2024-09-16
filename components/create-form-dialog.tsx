@@ -1,11 +1,10 @@
 "use client"
+import { createForm } from "@/lib/actions/form";
 import { Loader2Icon, Plus, PlusIcon } from "lucide-react";
-import { Button } from "./ui/button";
-import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTrigger } from "./ui/dialog";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { IForm } from "@/types";
-import { createForm } from "@/lib/actions/form";
+import { Button } from "./ui/button";
+import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTrigger } from "./ui/dialog";
 import { Input } from "./ui/input";
 
 
@@ -16,17 +15,10 @@ export default function CreateFormDialog() {
     const [description,setDescription]=useState<string>("")
     const onClick = async () => {
         setIsLoading(true)
-        const newForm: IForm = {
-            id: "",
-            title,
-            description,
-            fields: JSON.stringify([]),
-            questions: []
-        }
-        // setForms([...forms, newForm])
-        const form = await createForm(newForm)
 
-        if (form.data) {
+        const form = await createForm(title,description)
+
+        if (form?.data) {
             router.push(`/forms/${form.data.id}/edit`)
         }
 

@@ -1,23 +1,24 @@
 "use client"
 
 import { createContext, use, useState } from "react";
-import { IForm, FormContextProps, IQuestion, ISettings } from "../types";
+import { Form, FormContextProps,Settings } from "../types";
 
 
 
 const FormContext=createContext<FormContextProps>({} as FormContextProps)
 
+interface FormProviderProps{
+    details:Form,
+    children:React.ReactNode
+}
 
-export const FormProvider=({children}:{children:React.ReactNode})=>{
-    const [form,setForm]=useState({} as IForm)
-    const [formQuestions,setQuestions]=useState<IQuestion[]>([])
-    const [deletedQuestions,setDeletedQuestions]=useState<IQuestion[]>([])
-    const [settings,setSettings]=useState<ISettings>({} as ISettings)
-    
-    //question ordering
-    // const [qorder,setQOrder]=useState<number[]>([])
+
+export const FormProvider=({children,details}:FormProviderProps)=>{
+    const [formDetails,setFormDetails]=useState(details)
+    const [formSettings,setFormSettings]=useState<Settings>(details.settings)
+
     return (
-        <FormContext.Provider value={{form,setForm,formQuestions,setQuestions,deletedQuestions,setDeletedQuestions,settings,setSettings}}>
+        <FormContext.Provider value={{formDetails,updateFormDetails:setFormDetails,updateFormSettings:setFormSettings,formSettings}}>
             {children}
         </FormContext.Provider>
     )

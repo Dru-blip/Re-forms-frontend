@@ -1,56 +1,24 @@
+import { Dispatch, SetStateAction } from "react";
 
-
-interface ApiResponse<T>{
-    msg:"success"|"error",
-    data?:T
+export interface ApiResponse<T>{
+    statusCode: number;
+    path: string;
+    message: string;
+    data: T;
+    timestamp: string;
 }
 
-
-interface IForm{
+export interface Form{
     id:string,
     title:string,
     description:string,
     createdAt?:Date,
     fields:string,
-    questions:IQuestion[]
+    settings:Settings
 }
 
-type QuestionType='short'|'long'|'multi'|'checkbox'
 
-interface IOption{
-    id:number
-    value:string
-}
-
-interface IQuestion{
-    qid:string,
-    id?:string,
-    name:string,
-    type:QuestionType,
-    options?:string[],
-    key?:string[],
-    required:boolean,
-    formId:string
-}
-
-interface IAnswer{
-    id?:string,
-    questionId:string
-    name:string
-    type:QuestionType
-    value?:string[],
-    submissionId:string,
-}
-
-interface ISubmission{
-    id:string,
-    date:Date,
-    answers:IAnswer[],
-    userId:string,
-    formId:string
-}
-
-interface ISettings{
+export interface Settings{
     id:string
     confirmationMessage:string
     responseLimit:number
@@ -60,15 +28,11 @@ interface ISettings{
     formId:string
 }
 
-interface FormContextProps{
-    form:IForm,
-    setForm:React.Dispatch<React.SetStateAction<IForm>>,
-    formQuestions:IQuestion[]
-    setQuestions:React.Dispatch<React.SetStateAction<IQuestion[]>>
-    deletedQuestions:IQuestion[]
-    setDeletedQuestions:React.Dispatch<React.SetStateAction<IQuestion[]>>,
-    settings:ISettings,
-    setSettings:React.Dispatch<React.SetStateAction<ISettings>>
+export interface FormContextProps{
+    formDetails:Form
+    formSettings:Settings
+
+    updateFormDetails:Dispatch<SetStateAction<Form>>
+    updateFormSettings:Dispatch<SetStateAction<Settings>>,
 }
 
-export  type {IForm,IQuestion,FormContextProps,ApiResponse,QuestionType,IAnswer,ISubmission,ISettings}

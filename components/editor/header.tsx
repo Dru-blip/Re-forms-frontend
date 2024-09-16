@@ -29,7 +29,7 @@ export default function EditPageHeader({ id, title }: Props) {
                 <Label className="ml-2">Dashboard</Label>
             </Link>
             <div className="lg:flex hidden">
-                <Link href={"/dashboard"} className="hover:underline">Drafts/</Link>
+                <Link href={`/forms/${id}/edit`} className="hover:underline">Drafts/</Link>
                 <DropdownMenu>
                     <DropdownMenuTrigger>
                         <p className="hover:underline flex items-center">

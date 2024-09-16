@@ -13,6 +13,7 @@ import { Label } from "../ui/label";
 import { Separator } from "../ui/separator";
 import { getRandomNumber } from "@/lib/utils";
 import * as actions from "@/lib/actions/questions"
+import DisplayQuestionTypeIcon from "./question-type-icon";
 
 
 
@@ -25,7 +26,7 @@ interface Props {
 export default function QuestionCard({ question, index, updateQuestion }: Props) {
     const { setQuestions, formQuestions, setDeletedQuestions, deletedQuestions } = useContext(FormContext)
 
-   
+
     const deleteQuestion = async (id: string) => {
         let filtered = formQuestions.filter((question) => {
             if (question.qid !== id) {
@@ -33,7 +34,7 @@ export default function QuestionCard({ question, index, updateQuestion }: Props)
             }
         })
 
-        let data=await actions.deleteQuestion(question.formId,question.id!)
+        let data = await actions.deleteQuestion(question.formId, question.id!)
         console.log(data)
         setQuestions([...filtered])
         setDeletedQuestions([...deletedQuestions, question])
@@ -45,10 +46,10 @@ export default function QuestionCard({ question, index, updateQuestion }: Props)
     }
 
     const copyQuestion = async (ind: number) => {
-        const newQuestion = {...question,qid: getRandomNumber(), id:""}
+        const newQuestion = { ...question, qid: getRandomNumber(), id: "" }
         formQuestions.splice(ind, 0, newQuestion)
         setQuestions([...formQuestions])
-        let data=await actions.createQuestion(question.formId,newQuestion)
+        let data = await actions.createQuestion(question.formId, newQuestion)
         console.log(data)
     }
 
@@ -68,27 +69,8 @@ export default function QuestionCard({ question, index, updateQuestion }: Props)
     }
 
 
-    const renderQuestionTypeIcon = () => {
-        switch (question.type) {
-            case "short": {
-                return <NotepadText className="w-4 h-4 mr-2" />
-            }
-            case "long": {
-                return <Notebook className="w-4 h-4 mr-2" />
-            }
-            case "multi": {
-                return <CircleDotIcon className="w-4 h-4 mr-2" />
-            }
-            case "checkbox": {
-                return <SquareCheck className="w-4 h-4 mr-2" />
-            }
-            default: {
-                return <></>
-            }
-        }
-    }
 
-    const renderQuestion = () => {
+    const QuestionContent = () => {
         switch (question.type) {
             case "short":
             case "long": {
@@ -135,13 +117,13 @@ export default function QuestionCard({ question, index, updateQuestion }: Props)
         }
     }
 
-    
+
     return (
         <Card >
             <CardHeader className="grid grid-cols-1 gap-3 items-baseline">
                 <Label className="font-semibold flex items-center">
-                    {renderQuestionTypeIcon()}
-                    Question</Label>
+                    <DisplayQuestionTypeIcon type={question.type} />
+                    Content</Label>
                 <div className="grid grid-cols-3 gap-4">
                     <Input className="col-span-2" placeholder="Type your question here" value={question.name} onChange={(e) => {
                         question.name = e.target.value
@@ -164,14 +146,12 @@ export default function QuestionCard({ question, index, updateQuestion }: Props)
 
             </CardHeader>
             <CardContent>
-                {
-                    renderQuestion()
-                }
+                <QuestionContent />
             </CardContent>
             <CardFooter className="flex justify-between items-center">
                 <div className="flex items-center mr-1">
                     <Label className="mr-2 font-semibold">Required</Label>
-                    <Switch checked={question.required} onCheckedChange={(checked) => {
+                    <Switch checked={question.required} onCheckedChange={(checked: boolean) => {
                         question.required = checked
                         updateQuestion(question.qid, index, question)
                     }} />

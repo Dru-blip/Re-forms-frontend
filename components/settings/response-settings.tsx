@@ -8,21 +8,17 @@ import { Switch } from "../ui/switch"
 import FormContext from "@/context/form-context"
 import { Button } from "../ui/button"
 import { Separator } from "../ui/separator"
-import { ISettings } from "@/types"
 import SaveSettingsButton from "./settings-save-btn"
 
-export default function ResponseSettings({setting}:{setting:ISettings}) {
-    const {settings,setSettings}=useContext(FormContext)
-    useEffect(()=>{
-        setSettings(setting)
-    },[])
+export default function ResponseSettings() {
+    const {formSettings,updateFormSettings}=useContext(FormContext)
     return (
         <Card>
             <CardContent className="grid grid-cols-1 gap-5 mt-4">
                 <div className="flex items-center justify-start">
                     <Label className="text-md mr-2">Allow Response Editing</Label>
-                    <Switch checked={settings.editResponse} onCheckedChange={(change)=>{
-                        setSettings({...settings,editResponse:change})
+                    <Switch checked={formSettings.editResponse} onCheckedChange={(change)=>{
+                        updateFormSettings({...formSettings,editResponse:change})
                     }}/>
                 </div>
                 <p></p>
