@@ -2,16 +2,13 @@
 
 "use client"
 
+import { ArrowLeft, ChevronDown, EllipsisVertical, Settings2Icon } from "lucide-react"
 import Link from "next/link"
 import { Button } from "../ui/button"
-import { ArrowLeft, ChevronDown, EllipsisVertical, Eye, MenuIcon, Settings2Icon } from "lucide-react"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu"
 import { Label } from "../ui/label"
 import FormSaveButton from "./save-btn"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu"
-import { AngleIcon } from "@radix-ui/react-icons"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog"
-import { Card, CardDescription, CardHeader, CardTitle } from "../ui/card"
-import { Separator } from "../ui/separator"
+import { Card } from "../ui/card"
 
 interface Props {
     id: string,
@@ -21,7 +18,7 @@ interface Props {
 
 export default function EditPageHeader({ id, title }: Props) {
     return (
-        <div className="flex items-center justify-between p-2">
+        <Card className="flex items-center justify-between p-2 w-full fixed rounded shadow-md">
             <Link href={'/dashboard'} className="flex items-center">
                 <Button variant={"outline"} size={"icon"}>
                     <ArrowLeft className="w-5 h-5" />
@@ -40,7 +37,7 @@ export default function EditPageHeader({ id, title }: Props) {
                     <DropdownMenuContent>
                         <DropdownMenuGroup>
                             <DropdownMenuItem>
-                                <Link href={`/forms/${id}/responses`}>
+                                <Link href={`/forms/${id}/responses/table`}>
                                     View Responses
                                 </Link>
                             </DropdownMenuItem>
@@ -85,6 +82,6 @@ export default function EditPageHeader({ id, title }: Props) {
                     </DropdownMenuContent>
                 </DropdownMenu>
             </div>
-        </div>
+        </Card>
     )
 }

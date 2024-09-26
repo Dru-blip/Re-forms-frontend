@@ -1,45 +1,56 @@
-import { getQuestions } from "@/lib/actions/questions"
-import { getAnswersByQuestion } from "@/lib/actions/submissions"
-import { IAnswer, IQuestion } from "@/types"
-import SummaryClient from "./summary-client"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card"
-import PieChartComponent from "./charts/pie-chart-component"
+
+import { Question } from "@/types"
+import { cookies } from "next/headers"
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card"
 import BarChartComponent from "./charts/bar-chart-component"
+import PieChartComponent from "./charts/pie-chart-component"
+import SummaryClient from "./summary-client"
 
 
-type QuestionAnswer = { question: IQuestion, values: IAnswer[] }[]
+
+const fetchFormSummary=async (id:string)=>{
+    const token = cookies().get("token")!;
+    try {
+        const response = await fetch(process.env.BASE_API + `/${id}/summaries`, {
+            headers: {
+                "Content-type": "application/json",
+                Authorization: `Bearer ${token.value}`,
+            },
+        });
+        const responseData = await response.json();
+        return responseData.data;
+    } catch (err) {
+        return null;
+    }
+}
 
 export default async function Summary({ id }: { id: string }) {
-    const questions = await getQuestions(id)
+    // const questions = await getQuestions(id)
+    const summary:Question[]=await fetchFormSummary(id)
 
-    const getAnswers = async () => {
-        let answers: QuestionAnswer = []
-        if (questions.data?.length) {
-            for (let question of questions.data!) {
-                let answer: { question: IQuestion, values: IAnswer[] } = { question, values: [] }
-                let data = await getAnswersByQuestion(id, question.id as string)
-                answer.values = data.data!
-                answers.push(answer)
-            }
-        }
+    // const getAnswers = async () => {
+    //     let answers: QuestionAnswer = []
+    //     if (questions.data?.length) {
+    //         for (let question of questions.data!) {
+    //             let answer: { question: IQuestion, values: IAnswer[] } = { question, values: [] }
+    //             let data = await getAnswersByQuestion(id, question.id as string)
+    //             answer.values = data.data!
+    //             answers.push(answer)
+    //         }
+    //     }
 
-        return answers
-    }
-    let answers = await getAnswers()
+    //     return answers
+    // }
+    // let answers = await getAnswers()
 
-    const renderQuestionSummary = (question: IQuestion, values: IAnswer[]) => {
+    
+    const renderQuestionSummary = (question: Question) => {
         switch (question.type) {
-            case "short":
-            case "long": {
-                return values ? values.map((value, ind) => (
-                    <div className="bg-accent p-2 rounded-md" key={ind}>{value.value?.join(",")}</div>
-                )) : <></>
+            case "MULIT_CHOICE": {
+                return <PieChartComponent options={question.options!} />
             }
-            case "multi": {
-                return <PieChartComponent options={question.options!} values={values} />
-            }
-            case "checkbox": {
-                return <BarChartComponent options={question.options!} values={values} />
+            case "CHECKBOX": {
+                return <BarChartComponent options={question.options!} />
             }
         }
     }
@@ -47,6 +58,22 @@ export default async function Summary({ id }: { id: string }) {
     return (
         <div className="grid grid-cols-1 gap-4">
             {
+                summary.map((question,index)=>(
+                    <Card key={index}>
+                        <CardHeader>
+                            <CardTitle>
+                                {question.text}
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent className="grid grid-cols-1 gap-2">
+                            {
+                                renderQuestionSummary(question)
+                            }
+                        </CardContent>
+                    </Card>
+                ))
+            }
+            {/* {
                 answers.map(({ question, values }, index) => (
                     <Card key={index}>
                         <CardHeader>
@@ -66,8 +93,9 @@ export default async function Summary({ id }: { id: string }) {
                         </CardContent>
                     </Card>
                 ))
-            }
-            <SummaryClient answers={answers} />
+            } */}
+            <SummaryClient answers={summary}/>
+            
         </div>
     )
 }

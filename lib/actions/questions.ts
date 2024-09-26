@@ -1,131 +1,104 @@
-"use server"
+"use server";
 
-import { ApiResponse, IForm, IQuestion } from "@/types"
-import { revalidatePath } from "next/cache"
-import { cookies } from "next/headers"
+import { ApiResponse, Question } from "@/types";
+import { cookies } from "next/headers";
 
-
-export const getQuestions=async (formId:string):Promise<ApiResponse<IQuestion[]>> =>{
-    const token=cookies().get("token")?.value
-    try{
-        const response=await fetch(process.env.BASE_API+`/forms/${formId}/questions`,{
-            headers:{
-                "Content-type":"application/json",
-                "Authorization":`Bearer ${token}`
-            },
-        })
-        const data=await response.json()
-        
-        return {
-            msg:"success",
-            data:data.questions
-        }
-    }catch(error){
-        return {
-            msg:"error"
-        }
-    }
-}
-
-export const updateQuestion=async (formId:string,question:IQuestion):Promise<ApiResponse<IQuestion>> =>{
-    const token=cookies().get("token")?.value
-    try{
-        const response=await fetch(process.env.BASE_API+`/forms/${formId}/question/${question.id}`,{
-            method:"PUT",
-            headers:{
-                "Content-type":"application/json",
-                "Authorization":`Bearer ${token}`
-            },
-            body:JSON.stringify({question})
-        })
-
-        const res_data=await response.json()
-        return {
-            msg:"success",
-            data:res_data
-        }
-        
-    }catch(e){
-        
-        return {
-            msg:"error"
-        }
-    }
-}
-
-export const deleteQuestion=async (formId:string,questionId:string):Promise<ApiResponse<IQuestion>> =>{
-    const token=cookies().get("token")?.value
-    try{
-        const response=await fetch(process.env.BASE_API+`/forms/${formId}/question/${questionId}`,{
-            method:"DELETE",
-            headers:{
-                "Content-type":"application/json",
-                "Authorization":`Bearer ${token}`
-            },
-        })
-
-        const res_data=await response.json()
-        return {
-            msg:"success",
-            data:res_data
-        }
-        
-    }catch{
-        return {
-            msg:"error"
-        }
-    }
-}
-
-export const createQuestion=async (formId:string,question:IQuestion):Promise<ApiResponse<IQuestion>> =>{
-    const token=cookies().get("token")?.value
-    try{
-        
-        let {id,...data}={...question}
-        
-        const response=await fetch(process.env.BASE_API+`/forms/${formId}/question`,{
-            method:"POST",
-            headers:{
-                "Content-type":"application/json",
-                "Authorization":`Bearer ${token}`
-            },
-            body:JSON.stringify({question:data})
-        })
-
-        const res_data=await response.json()
-        return {
-            msg:"success",
-            data:res_data
-        }
-        
-    }catch{
-        return {
-            msg:"error"
-        }
-    }
-}
-
-export const createQuestions=async(formId:string,questions:IQuestion[],deletedQuestions:IQuestion[]):Promise<ApiResponse<IQuestion[]>> =>{
-    const token=cookies().get("token")?.value
+export const updateQuestion = async (question: Partial<Question>) => {
+    const token = cookies().get("token")!;
     try {
-        const response=await fetch(process.env.BASE_API+`/forms/${formId}/questions`,{
-            method:"POST",
-            headers:{
-                "Content-type":"application/json",
-                "Authorization":`Bearer ${token}`
+        const response = await fetch(process.env.BASE_API + `/${question.formId}/questions/${question.id}`, {
+            method: "PATCH",
+            headers: {
+                "Content-type": "application/json",
+                Authorization: `Bearer ${token.value}`,
             },
-            body:JSON.stringify({questions,deletedQuestions})
-        })
-        const res_data=await response.json()
-        // console.log(res_data)
-        revalidatePath(`/forms/${formId}/edit`)
-        return {
-            msg:"success",
-            // data:res_data
+            body: JSON.stringify({
+                text: question.text,
+                order: question.order,
+                isRequired: question.isRequired,
+                type: question.type,
+            }),
+        });
+
+        const responseData = await response.json();
+
+        if (responseData.message === "success") {
+            return responseData;
         }
-    } catch (error) {
-        return {
-            msg:"error"
-        }
+        return null;
+    } catch (err) {
+        return null;
     }
-}
+};
+
+export const createQuestion = async (
+    formId: string,
+    isRequired: boolean,
+    order: number
+): Promise<ApiResponse<Question> | null> => {
+    const token = cookies().get("token")!;
+    try {
+        const response = await fetch(process.env.BASE_API + `/${formId}/questions`, {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json",
+                Authorization: `Bearer ${token.value}`,
+            },
+            body: JSON.stringify({ isRequired, order }),
+        });
+
+        const responseData = await response.json();
+
+        if (responseData.message === "success") {
+            return responseData;
+        }
+        return null;
+    } catch (err) {
+        return null;
+    }
+};
+
+export const reorderQuestion = async (q1: Question, q2: Question) => {
+    const token = cookies().get("token")!;
+    try {
+        const response = await fetch(process.env.BASE_API + `/${q1.formId}/questions/reorder`, {
+            method: "PATCH",
+            headers: {
+                "Content-type": "application/json",
+                Authorization: `Bearer ${token.value}`,
+            },
+            body: JSON.stringify({ q1, q2 }),
+        });
+
+        const responseData = await response.json();
+
+        if (responseData.message === "success") {
+            return responseData;
+        }
+        return null;
+    } catch (err) {
+        return null;
+    }
+};
+
+export const deleteQuestion = async (formId: string, questionId: string): Promise<ApiResponse<Question> | null> => {
+    const token = cookies().get("token")!;
+    try {
+        const response = await fetch(process.env.BASE_API + `/${formId}/questions/${questionId}`, {
+            method: "DELETE",
+            headers: {
+                "Content-type": "application/json",
+                Authorization: `Bearer ${token.value}`,
+            },
+        });
+
+        const responseData = await response.json();
+
+        if (responseData.message === "success") {
+            return responseData;
+        }
+        return null;
+    } catch (err) {
+        return null;
+    }
+};

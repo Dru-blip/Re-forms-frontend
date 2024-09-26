@@ -54,7 +54,6 @@ export const loginFormAction = async (email: string, password: string) => {
     });
 
     const responseData:ApiResponse<{ accessToken: string }>=await response.json();
-    console.log(responseData)
     if (responseData.message === "success") {
       cookies().set("token", responseData.data.accessToken);
       return {

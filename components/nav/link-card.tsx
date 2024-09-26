@@ -11,7 +11,6 @@ interface Props{
 
 export default function LinkCard({href,name}:Props){
     const path=usePathname()
-    console.log()
     return (
         <Link href={href} className={path.includes(name.toLowerCase())?`bg-accent text-primary p-2 rounded font-semibold`:`text-primary hover:underline p-2`}>
             {name}

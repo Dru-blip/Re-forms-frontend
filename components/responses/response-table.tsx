@@ -1,51 +1,50 @@
-import { format } from "date-fns"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table"
-import { IAnswer, IQuestion, ISubmission } from "@/types"
+import { format } from "date-fns";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
+import { Answer, Question, Response } from "@/types";
 
 interface Props {
-    responses: {date:Date,values:IAnswer[]}[],
-    header:IQuestion[]
-    // columns: string[]
+    responses: Response[];
+    header: Question[];
 }
 
-
-export default function ResponseTable({header,responses}:Props){
+export default async function ResponseTable({ header, responses }: Props) {
     return (
-        <Table >
-                <TableHeader>
-                    <TableRow>
-                        <TableHead >Date</TableHead>
-                        {
-                           header? header.map((column,index)=>{
-                                return <TableHead  key={index}>{column.name}</TableHead>
-                            }):<></>
-                        }
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    {
-
-                        responses.map((response,index)=>{
-                            return (
-                                <TableRow key={index}>
-                                    <TableCell >{format(response.date,"Pp")}</TableCell>
-                                    {
-                                        response.values.map((value,index)=>(
-                                            <TableCell  key={index}>{value.value?.join(" , ")}</TableCell>
-                                        ))
-                                    }
-                                </TableRow>
-                            )
+        <Table>
+            <TableHeader>
+                <TableRow>
+                    <TableHead>Date</TableHead>
+                    {header ? (
+                        header.map((column, index) => {
+                            return <TableHead key={index}>{column.text}</TableHead>;
                         })
-                        // submissions.map((submission,index)=>{
-                        //     return (
-                        //         <TableRow key={index}>
-                        //             {format()}
-                        //         </TableRow>
-                        //     )
-                        // })
-                    }
-                </TableBody>
-            </Table>
-    )
+                    ) : (
+                        <></>
+                    )}
+                </TableRow>
+            </TableHeader>
+            <TableBody>
+                {
+                    responses.map((response,index)=>{
+                        return (
+                            <TableRow key={index}>
+                                <TableCell >{format(response.submittedDate,"Pp")}</TableCell>
+                                {
+                                    response.answers.map((answer)=>{
+                                        if(answer.options.length>0){
+                                            let optionStrings:string[]=[]
+                                            answer.options.forEach((val)=>{
+                                                optionStrings.push(val.text)
+                                            })
+                                            return <TableCell key={answer.id}>{optionStrings.join(", ")}</TableCell>
+                                        }
+                                       return <TableCell key={answer.id}>{answer.text}</TableCell>
+                                    })
+                                }
+                            </TableRow>
+                        )
+                    })
+                }
+            </TableBody>
+        </Table>
+    );
 }

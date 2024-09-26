@@ -1,27 +1,51 @@
-"use client"
+"use client";
 
-import { createContext, use, useState } from "react";
-import { Form, FormContextProps,Settings } from "../types";
+import { createContext,  Dispatch,  SetStateAction,  useState } from "react";
+import { Form,  Question, Settings } from "../types";
 
 
-
-const FormContext=createContext<FormContextProps>({} as FormContextProps)
-
-interface FormProviderProps{
-    details:Form,
-    children:React.ReactNode
+interface FormContextProps {
+  formDetails: Form;
+  formSettings: Settings;
+  formQuestions: Question[];
+  activeQuestion:Question|undefined
+  updateActiveQuestion:Dispatch<SetStateAction<Question|undefined>>
+  updateFormQuestions: Dispatch<SetStateAction<Question[]>>;
+  updateFormDetails: Dispatch<SetStateAction<Form>>;
+  updateFormSettings: Dispatch<SetStateAction<Settings>>;
 }
 
 
-export const FormProvider=({children,details}:FormProviderProps)=>{
-    const [formDetails,setFormDetails]=useState(details)
-    const [formSettings,setFormSettings]=useState<Settings>(details.settings)
+const FormContext = createContext<FormContextProps>({} as FormContextProps);
 
-    return (
-        <FormContext.Provider value={{formDetails,updateFormDetails:setFormDetails,updateFormSettings:setFormSettings,formSettings}}>
-            {children}
-        </FormContext.Provider>
-    )
+interface FormProviderProps {
+  details: Form;
+  questions:Question[]
+  children: React.ReactNode;
 }
 
-export default FormContext
+export const FormProvider = ({ children, details,questions }: FormProviderProps) => {
+  const [formDetails, setFormDetails] = useState(details);
+  const [formSettings, setFormSettings] = useState<Settings>(details.settings);
+  const [formQuestions, setFormQuestions] = useState<Question[]>(questions);
+  const [activeQuestion,setActiveQuestion]=useState<Question>()
+
+  return (
+    <FormContext.Provider
+      value={{
+        formDetails,
+        updateFormDetails: setFormDetails,
+        updateFormSettings: setFormSettings,
+        formSettings,
+        formQuestions: formQuestions,
+        updateFormQuestions: setFormQuestions,
+        activeQuestion,
+        updateActiveQuestion:setActiveQuestion
+      }}
+    >
+      {children}
+    </FormContext.Provider>
+  );
+};
+
+export default FormContext;

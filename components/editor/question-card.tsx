@@ -1,173 +1,136 @@
-"use client"
+"use client";
 
-import { IForm, IQuestion, QuestionType } from "@/types";
+import FormContext from "@/context/form-context";
+import * as questionActions from "@/lib/actions/questions";
+import { debounce } from "@/lib/utils";
+import { Question, QuestionType } from "@/types";
+import { ChangeEvent, useContext, useState } from "react";
 import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
 import { Input } from "../ui/input";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectSeparator, SelectTrigger, SelectValue } from "../ui/select";
-import { useContext, useState } from "react";
-import FormContext from "@/context/form-context";
-import { Button } from "../ui/button";
-import { Circle, CircleDotIcon, CopyIcon, Notebook, NotepadText, Plus, Square, SquareCheck, Trash2, X } from "lucide-react";
-import { Switch } from "../ui/switch";
 import { Label } from "../ui/label";
-import { Separator } from "../ui/separator";
-import { getRandomNumber } from "@/lib/utils";
-import * as actions from "@/lib/actions/questions"
+import { Select, SelectContent, SelectItem, SelectSeparator, SelectTrigger, SelectValue } from "../ui/select";
+import { Switch } from "../ui/switch";
+import { QuestionActions } from "./question-actions";
+import { QuestionRenderer } from "./question-renderer";
 import DisplayQuestionTypeIcon from "./question-type-icon";
-
-
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import { Button } from "../ui/button";
+import { GripVertical } from "lucide-react";
 
 interface Props {
-    question: IQuestion,
-    index: number,
-    updateQuestion: (id: string, index: number, question: IQuestion) => void,
+    question: Question;
+    index: number;
 }
 
-export default function QuestionCard({ question, index, updateQuestion }: Props) {
-    const { setQuestions, formQuestions, setDeletedQuestions, deletedQuestions } = useContext(FormContext)
+/**
+ * A single question card component. This component will render a question form
+ * based on the question type, and allow the user to edit the question text,
+ * options, and other settings.
+ *
+ * @param {Question} question - The question object to render.
+ * @param {number} index - The index of the question in the form.
+ * @returns {JSX.Element} The rendered question card component.
+ */
+export default function QuestionCard({ question, index }: Props): JSX.Element {
+    const { formQuestions, updateFormQuestions, activeQuestion, updateActiveQuestion } = useContext(FormContext);
+    const { listeners, attributes, setNodeRef, transform, transition } = useSortable({
+        id: question.id,
+        data: { index, question },
+    });
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const style = {
+        transform: CSS.Translate.toString(transform),
+        transition,
+    };
 
+    const handleUpdateQuestion = debounce(async (e: ChangeEvent<HTMLInputElement>) => {
+        console.log(e.target.value);
+        question.text = e.target.value;
+        formQuestions[index] = { ...question };
+        updateFormQuestions([...formQuestions]);
+        await questionActions.updateQuestion({ id: question.id, text: question.text });
+    }, 1000);
 
-    const deleteQuestion = async (id: string) => {
-        let filtered = formQuestions.filter((question) => {
-            if (question.qid !== id) {
-                return question
+    const handleQuestionTypeChange = async (value: string) => {
+        if (question.type !== value) {
+            question.type = value as QuestionType;
+            if (question.type !== "MULIT_CHOICE" && question.type !== "CHECKBOX") {
+                question.options.length = 0;
             }
-        })
-
-        let data = await actions.deleteQuestion(question.formId, question.id!)
-        console.log(data)
-        setQuestions([...filtered])
-        setDeletedQuestions([...deletedQuestions, question])
-    }
-
-    const deleteOption = (ind: number) => {
-        question.options?.splice(ind, 1)
-        updateQuestion(question.qid, index, question)
-    }
-
-    const copyQuestion = async (ind: number) => {
-        const newQuestion = { ...question, qid: getRandomNumber(), id: "" }
-        formQuestions.splice(ind, 0, newQuestion)
-        setQuestions([...formQuestions])
-        let data = await actions.createQuestion(question.formId, newQuestion)
-        console.log(data)
-    }
-
-    const addOption = () => {
-        if (question.options) {
-            question.options.push(`Option ${question.options.length + 1}`)
-        } else {
-            question.options = [`Option 1`]
+            formQuestions[index] = { ...question };
+            updateFormQuestions([...formQuestions]);
+            await questionActions.updateQuestion({ id: question.id, type: question.type });
         }
-        updateQuestion(question.qid, index, question)
-    }
-
-    const onQuestionTypeChange = async (value: string) => {
-        question.type = value as QuestionType
-        question.options = []
-        updateQuestion(question.qid, index, question)
-    }
-
-
-
-    const QuestionContent = () => {
-        switch (question.type) {
-            case "short":
-            case "long": {
-                return (
-                    <div className="bg-accent rounded-md p-3">{question.type} answer here</div>
-                )
-            }
-            case "multi":
-            case "checkbox": {
-                return (
-                    <div className="grid grid-cols-1 gap-4  p-2">
-                        {
-                            question.options ? question.options.map((option, ind) => (
-                                <div key={ind} className="flex items-center justify-between">
-                                    <div className="flex items-center w-full">
-                                        {
-                                            question.type === "multi" ? <Circle className=" mr-2 w-6 h-6 text-gray-500" /> : <Square className="mr-2 w-6 h-6 text-gray-500" />
-                                        }
-
-                                        <Input value={option} onChange={async (e) => {
-                                            question.options![ind] = e.target.value
-                                            updateQuestion(question.qid, index, question)
-                                        }} />
-                                    </div>
-
-                                    <Button size={"icon"} variant={"ghost"} onClick={() => deleteOption(ind)}>
-                                        <X className="w-4 h-4" />
-                                    </Button>
-                                </div>
-
-                            )) : <></>
-                        }
-
-                        <Button onClick={addOption} variant={"ghost"}>
-                            <Plus className="mr-2 w-4 h-4" />
-                            Add Option
-                        </Button>
-                    </div>
-                )
-            }
-            default: {
-                return <></>
-            }
-        }
-    }
-
+    };
 
     return (
-        <Card >
-            <CardHeader className="grid grid-cols-1 gap-3 items-baseline">
-                <Label className="font-semibold flex items-center">
-                    <DisplayQuestionTypeIcon type={question.type} />
-                    Content</Label>
-                <div className="grid grid-cols-3 gap-4">
-                    <Input className="col-span-2" placeholder="Type your question here" value={question.name} onChange={(e) => {
-                        question.name = e.target.value
-                        updateQuestion(question.qid, index, question)
-                    }} />
+        <Card
+            style={style}
+            className={
+                activeQuestion?.id === question.id
+                    ? "flex flex-row-reverse border-l-4 border-black"
+                    : "flex flex-row-reverse"
+            }
+            ref={setNodeRef}
+            onClick={() => {
+                updateActiveQuestion(question);
+            }}
+        >
+            <Button variant={"ghost"} className="h-full cursor-grab" {...attributes} {...listeners}>
+                <GripVertical />
+            </Button>
+            <div className="w-full">
+                <CardHeader className="grid grid-cols-1 gap-3 items-baseline">
+                    <Label className="font-semibold flex items-center">
+                        <DisplayQuestionTypeIcon type={question.type} />
+                        Question
+                    </Label>
+                    <div className="grid grid-cols-3 gap-4">
+                        <Input
+                            className="col-span-2"
+                            placeholder="Type your question here"
+                            defaultValue={question.text}
+                            onChange={handleUpdateQuestion}
+                        />
 
-                    <Select onValueChange={onQuestionTypeChange}>
-                        <SelectTrigger>
-                            <SelectValue placeholder={question.type} />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="short">short</SelectItem>
-                            <SelectItem value="long">long</SelectItem>
-                            <SelectSeparator></SelectSeparator>
-                            <SelectItem value="multi">multi</SelectItem>
-                            <SelectItem value="checkbox">checkbox</SelectItem>
-                        </SelectContent>
-                    </Select>
-                </div>
+                        <Select onValueChange={handleQuestionTypeChange}>
+                            <SelectTrigger>
+                                <SelectValue placeholder={question.type.toLowerCase()} />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="TEXT">text</SelectItem>
+                                <SelectSeparator />
+                                <SelectItem value="MULIT_CHOICE">multi</SelectItem>
+                                <SelectItem value="CHECKBOX">checkbox</SelectItem>
+                                <SelectItem value="SELECT">select</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
+                </CardHeader>
+                <CardContent>
+                    <QuestionRenderer question={question} />
+                </CardContent>
 
-            </CardHeader>
-            <CardContent>
-                <QuestionContent />
-            </CardContent>
-            <CardFooter className="flex justify-between items-center">
-                <div className="flex items-center mr-1">
-                    <Label className="mr-2 font-semibold">Required</Label>
-                    <Switch checked={question.required} onCheckedChange={(checked: boolean) => {
-                        question.required = checked
-                        updateQuestion(question.qid, index, question)
-                    }} />
-                </div>
-                <div className="flex items-center items-center">
-                    <Button size={"icon"} variant={"ghost"} onClick={() => copyQuestion(index)}>
-                        <CopyIcon className="w-5 h-5" />
-                    </Button>
-                    <Separator className="w-[1px] mr-2 h-[20px] bg-primary" orientation="vertical" />
-
-                    <Button size={"icon"} variant={"ghost"} onClick={async () => await deleteQuestion(question.qid)}>
-                        <Trash2 className="w-4 h-4" />
-                    </Button>
-                </div>
-
-            </CardFooter>
+                <CardFooter className="flex justify-between items-center">
+                    <div className="flex items-center mr-1">
+                        <Label className="mr-2 font-semibold">Required</Label>
+                        <Switch
+                            checked={question.isRequired}
+                            onCheckedChange={async (checked: boolean) => {
+                                question.isRequired = checked;
+                                formQuestions[index] = { ...question };
+                                updateFormQuestions([...formQuestions]);
+                                await questionActions.updateQuestion({
+                                    id: question.id,
+                                    isRequired: question.isRequired,
+                                });
+                            }}
+                        />
+                    </div>
+                    <QuestionActions question={question} />
+                </CardFooter>
+            </div>
         </Card>
-    )
+    );
 }

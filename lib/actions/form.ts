@@ -41,13 +41,32 @@ export const createForm = async (
       body: JSON.stringify({ title, description }),
     });
     const responseData = await response.json();
-    console.log(responseData)
     revalidatePath("/dashboard");
     return responseData;
   } catch (error) {
     return null;
   }
 };
+
+
+export const deleteForm=async (id:string):Promise<ApiResponse<Form>|null> =>{
+    const token=cookies().get("token")?.value
+    try {
+        const response=await fetch(process.env.BASE_API+`/forms/${id}`,{
+            method:"DELETE",
+            headers:{
+                "Content-type":"application/json",
+                "Authorization":`Bearer ${token}`
+            },
+        })
+        const responseData:ApiResponse<Form>=await response.json()
+
+        revalidatePath('/dashboard')
+        return responseData
+    } catch (error) {
+        return null
+    }
+}
 
 // export const getForm=async (id:string):Promise<ApiResponse<IForm>> =>{
 //     const token=cookies().get("token")?.value
@@ -98,29 +117,7 @@ export const createForm = async (
 //     }
 // }
 
-// export const deleteForm=async (id:string):Promise<ApiResponse<IForm>> =>{
-//     const token=cookies().get("token")?.value
-//     try {
-//         const response=await fetch(process.env.BASE_API+`/forms/${id}`,{
-//             method:"DELETE",
-//             headers:{
-//                 "Content-type":"application/json",
-//                 "Authorization":`Bearer ${token}`
-//             },
-//         })
-//         const res_data=await response.json()
 
-//         revalidatePath('/dashboard')
-//         return {
-//             msg:"success",
-//             data:res_data.form
-//         }
-//     } catch (error) {
-//         return {
-//             msg:"error"
-//         }
-//     }
-// }
 
 // export const createSubmission=async (formId:string,answers:IAnswer[]):Promise<ApiResponse<ISubmission>> =>{
 //     const token=cookies().get("token")?.value

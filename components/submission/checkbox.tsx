@@ -1,7 +1,7 @@
 
 "use client"
 
-import { IQuestion, IAnswer } from "@/types"
+import { Question, Answer } from "@/types"
 import { Dispatch, SetStateAction, useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card"
 import { Label } from "../ui/label"
@@ -10,8 +10,8 @@ import { Check, CheckCircle2, Circle, Square, SquareCheck } from "lucide-react"
 
 interface Props {
     question: IQuestion,
-    answers: IAnswer[],
-    setAnswers: Dispatch<SetStateAction<IAnswer[]>>
+    answers: Answer[],
+    setAnswers: Dispatch<SetStateAction<Answer[]>>
 }
 
 export default function CheckboxAnswers({ question, answers, setAnswers }: Props) {

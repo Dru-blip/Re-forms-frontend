@@ -1,9 +1,9 @@
-import { IForm } from "@/types"
+import { Form } from "@/types"
 import FormCard from "./form-card"
 
 
 interface Props{
-    forms:IForm[]
+    forms:Form[]
 }
 
 
