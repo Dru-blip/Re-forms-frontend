@@ -4,12 +4,12 @@ import { Answer, Form, Question } from "@/types";
 import { FormEvent, useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { Card, CardDescription, CardHeader, CardTitle } from "../ui/card";
-// import { createSubmission } from "@/lib/actions/form";
 import * as ResponseActions from "@/lib/actions/submissions";
 import { Loader2Icon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import MultiChoiceAnswer from "./multi-choice-answer";
 import TextAnswer from "./text-answer";
+import CheckboxAnswers from "./checkbox";
 
 interface Props {
     formDetails: Form;
@@ -60,7 +60,9 @@ export default function FormSubmission({ formDetails, formQuestions }: Props) {
                 );
             }
             case "CHECKBOX": {
-                return <></>;
+                return (
+                    <CheckboxAnswers answerMap={answerMap} question={question} />
+                );
             }
             case "SELECT": {
                 return <></>;

@@ -1,5 +1,4 @@
 import { Answer, Question } from "@/types";
-// import { RadioGroupItem } from "../ui/radio-group";
 import { Label } from "../ui/label";
 import { Dispatch, SetStateAction, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
@@ -21,12 +20,6 @@ export default function MultiChoiceAnswer({ question, answerMap, answers, setAns
             questionId: question.id,
             formId: question.formId,
         });
-        // const newAnswers = answers.filter((ans) => ans.questionId !== question.id)
-        // setAnswers([...newAnswers, {
-        // optionIds: [question.options[index].id],
-        // questionId: question.id,
-        // formId: question.formId
-        // }])
     };
     return (
         <Card className="py-6 px-4">
