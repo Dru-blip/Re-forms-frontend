@@ -1,43 +1,44 @@
+"use client";
 
-"use client"
-
-import { loginFormAction ,registerFormAction } from "@/lib/actions/auth"
-import { Input } from "../ui/input"
-import { Button } from "../ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../ui/card"
-import { Form, FormControl, FormField, FormItem, FormLabel } from "../ui/form"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
-import { userRegisterSchema } from "@/lib/form-validation"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useRouter } from "next/navigation"
-import Link from "next/link"
+import { loginFormAction, registerFormAction } from "@/lib/actions/auth";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../ui/card";
+import { Form, FormControl, FormField, FormItem, FormLabel } from "../ui/form";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { userRegisterSchema } from "@/lib/form-validation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { useState } from "react";
 
 export default function RegisterForm() {
-    const router=useRouter()
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const router = useRouter();
     const form = useForm<z.infer<typeof userRegisterSchema>>({
         resolver: zodResolver(userRegisterSchema),
         defaultValues: {
             name: "",
             email: "",
-            password: ""
-        }
-    })
+            password: "",
+        },
+    });
 
     const onSubmit = async (values: z.infer<typeof userRegisterSchema>) => {
-        const res = await registerFormAction(values)
+        setIsLoading(true);
+        const res = await registerFormAction(values);
         if (res.msg === "success") {
-           router.push("/")
+            router.push("/login");
         }
-    }
+        setIsLoading(false);
+    };
 
     return (
         <Card className="w-full max-w-sm">
             <CardHeader>
                 <CardTitle className="text-2xl">Register</CardTitle>
-                <CardDescription>
-                    Enter your information to create account
-                </CardDescription>
+                <CardDescription>Enter your information to create account</CardDescription>
             </CardHeader>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -73,14 +74,16 @@ export default function RegisterForm() {
                                 <FormItem>
                                     <FormLabel>Password</FormLabel>
                                     <FormControl>
-                                        <Input type="password"  {...field} />
+                                        <Input type="password" {...field} />
                                     </FormControl>
                                 </FormItem>
                             )}
                         />
                     </CardContent>
                     <CardFooter className="flex flex-col">
-                        <Button type="submit" className="w-full">Sign up</Button>
+                        <Button type="submit" className="w-full">
+                            Sign up
+                        </Button>
                         <div className="mt-4 text-center text-sm">
                             Already have an account?{" "}
                             <Link href="/login" className="underline">
@@ -91,6 +94,5 @@ export default function RegisterForm() {
                 </form>
             </Form>
         </Card>
-
-    )
+    );
 }

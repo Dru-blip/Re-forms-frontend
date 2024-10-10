@@ -14,11 +14,16 @@ export default function FormEditor() {
 
     const addQuestion = async () => {
         setIsLoading(true);
-        console.log(formQuestions.length)
+
+        let maxOrder = -Infinity;
+        formQuestions.forEach((question) => {
+            maxOrder = Math.max(question.order, maxOrder);
+        });
+      
         let newQuestion = await questionActions.createQuestion(
             formDetails.id,
             formSettings.questionsRequiredDefault,
-            formQuestions.length
+            maxOrder + 1
         );
         if (newQuestion?.message === "success") {
             updateFormQuestions([...formQuestions, newQuestion?.data!]);

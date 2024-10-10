@@ -18,7 +18,7 @@ interface Props {
  * @param {Question} question - The question object to render.
  * @returns {JSX.Element} The rendered question component.
  */
-export const QuestionRenderer = ({ question }: Props) => {
+export const QuestionRenderer = ({ question }: Props): JSX.Element => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const { formQuestions, updateFormQuestions } = useContext(FormContext);
 
@@ -39,6 +39,7 @@ export const QuestionRenderer = ({ question }: Props) => {
             return <div className="bg-accent rounded-md p-3">{question.type} answer here</div>;
         case "MULIT_CHOICE":
         case "CHECKBOX":
+        case "SELECT":
             return (
                 <div className="grid grid-cols-1 gap-4 p-2">
                     <OptionsList question={question} />

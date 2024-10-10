@@ -55,7 +55,7 @@ export default function QuestionCard({ question, index }: Props): JSX.Element {
     const handleQuestionTypeChange = async (value: string) => {
         if (question.type !== value) {
             question.type = value as QuestionType;
-            if (question.type !== "MULIT_CHOICE" && question.type !== "CHECKBOX") {
+            if (question.type !== "MULIT_CHOICE" && question.type !== "CHECKBOX" && question.type!=="SELECT") {
                 question.options.length = 0;
             }
             formQuestions[index] = { ...question };

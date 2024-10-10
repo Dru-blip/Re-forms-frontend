@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import MultiChoiceAnswer from "./multi-choice-answer";
 import TextAnswer from "./text-answer";
 import CheckboxAnswers from "./checkbox";
+import SelectAnswer from "./select-answer";
 
 interface Props {
     formDetails: Form;
@@ -60,12 +61,10 @@ export default function FormSubmission({ formDetails, formQuestions }: Props) {
                 );
             }
             case "CHECKBOX": {
-                return (
-                    <CheckboxAnswers answerMap={answerMap} question={question} />
-                );
+                return <CheckboxAnswers answerMap={answerMap} question={question} />;
             }
             case "SELECT": {
-                return <></>;
+                return <SelectAnswer answerMap={answerMap} question={question} />;
             }
             default: {
                 return <></>;

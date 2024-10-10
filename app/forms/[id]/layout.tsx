@@ -36,13 +36,13 @@ async function fetchFormQuestions(id: string) {
 
 export default async function FormLayout({ children, params }: { children: React.ReactNode; params: { id: string } }) {
     const pathname = headers().get("x-pathname");
-    let formDetails = {} as Form;
-    let formQuestions: Question[] = [];
-    
-    if (pathname && !pathname.includes("/live")) {
-        formDetails = (await fetchForm(params.id)) ?? ({} as Form);
-        formQuestions = (await fetchFormQuestions(params.id)) ?? [];
-    }
+    let formDetails = await fetchForm(params.id);
+    let formQuestions = await fetchFormQuestions(params.id);
+
+    // if (pathname && !pathname.includes("/live")) {
+    //     formDetails = (await fetchForm(params.id)) ?? ({} as Form);
+    //     formQuestions = (await fetchFormQuestions(params.id)) ?? [];
+    // }
     return (
         <section>
             <FormProvider details={formDetails!} questions={formQuestions!}>
