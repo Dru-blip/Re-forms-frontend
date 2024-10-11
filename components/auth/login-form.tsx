@@ -22,6 +22,8 @@ export default function LoginForm() {
         setIsLoading(true);
         const res = await loginFormAction(email, password);
         if (res.msg === "success") {
+            console.log(res)
+            window.localStorage.setItem("userDetails", JSON.stringify({ name: res.data.data.name, email: res.data.data.email }));
             router.push("/dashboard");
         }
         setMessage(res.msg);

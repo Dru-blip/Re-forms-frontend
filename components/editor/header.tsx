@@ -1,5 +1,3 @@
-
-
 "use client"
 
 import { ArrowLeft, ChevronDown, EllipsisVertical, Settings2Icon } from "lucide-react"
@@ -26,7 +24,7 @@ export default function EditPageHeader({ id, title }: Props) {
                 <Label className="ml-2">Dashboard</Label>
             </Link>
             <div className="lg:flex hidden">
-                <Link href={`/forms/${id}/edit`} className="hover:underline">Drafts/</Link>
+                {/* <Link href={`/forms/${id}/edit`} className="hover:underline">Drafts/</Link> */}
                 <DropdownMenu>
                     <DropdownMenuTrigger>
                         <p className="hover:underline flex items-center">
@@ -67,18 +65,13 @@ export default function EditPageHeader({ id, title }: Props) {
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="flex flex-col">
-
                         <FormSaveButton />
                         <DropdownMenuItem>
                             <Link href={`/forms/${id}/edit/settings/default`} className="flex items-center">
-
                                 <Settings2Icon className="mr-2 w-4 h-4" />
                                 Settings
-
                             </Link>
                         </DropdownMenuItem>
-
-
                     </DropdownMenuContent>
                 </DropdownMenu>
             </div>

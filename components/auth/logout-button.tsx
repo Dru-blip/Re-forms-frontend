@@ -5,6 +5,7 @@ import { useState } from "react"
 import { Button } from "../ui/button"
 import { logout } from "@/lib/actions/auth"
 import { useRouter } from "next/navigation"
+import { LogOutIcon } from "lucide-react"
 
 export default function LogoutButton(){
     const [isLoading,setIsLoading]=useState<boolean>(false)
@@ -16,6 +17,6 @@ export default function LogoutButton(){
         router.push("/login")
     }
     return (
-        <Button  variant={"outline"}  onClick={onClick}>Logout</Button>
+        <Button  variant={"outline"}  onClick={onClick}><LogOutIcon className="mr-2 w-4 h-4"/> Logout</Button>
     )
 }

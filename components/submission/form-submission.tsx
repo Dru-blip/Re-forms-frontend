@@ -37,7 +37,7 @@ export default function FormSubmission({ formDetails, formQuestions }: Props) {
             const an = { formId: formDetails.id, answers: Array.from(answerMap.values()) };
             const res = await ResponseActions.submitResponse(formDetails.id, an);
             if (res.msg === "success") {
-                router.push(`/forms/${formDetails.id}/responses/${res.data?.id}/view`);
+                router.push(`/forms/${formDetails.id}/responses/${res.data?.id}/formResponse`);
             }
         }
         setIsLoading(false);

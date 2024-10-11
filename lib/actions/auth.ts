@@ -3,10 +3,8 @@
 import { cookies } from "next/headers";
 import { z } from "zod";
 import { userRegisterSchema } from "../form-validation";
-import { ApiResponse } from "@/types";
 
 export const registerFormAction = async (values: z.infer<typeof userRegisterSchema>) => {
-    // const user = { ...values };
 
     try {
         const res = await fetch(process.env.AUTH_API_URL + "/register", {
@@ -18,18 +16,23 @@ export const registerFormAction = async (values: z.infer<typeof userRegisterSche
             body: JSON.stringify({ ...values }),
         });
 
-        const data = await res.json();
-        if (data) {
-            if (data.token) {
-                // cookies().set("token", data.token)
+        const responseData = await res.json();
+        if (responseData) {
+            if (responseData.data.accessToken) {
+                cookies().set("token", responseData.data.accessToken, {
+                    maxAge: 18000,
+                    httpOnly: true,
+                });
             }
             return {
-                msg: "success",
+                msg: responseData.message,
+                data:responseData
             };
         }
 
         return {
-            msg: "error",
+            data:responseData,
+            msg: responseData.message,
         };
     } catch (e) {
         return {
@@ -51,17 +54,19 @@ export const loginFormAction = async (email: string, password: string) => {
             body: JSON.stringify({ ...user }),
         });
 
-        const responseData: ApiResponse<{ accessToken: string }> = await response.json();
+        const responseData = await response.json();
         if (responseData.message === "success") {
             cookies().set("token", responseData.data.accessToken, {
                 maxAge: 18000,
                 httpOnly: true,
             });
             return {
+                data:responseData,
                 msg: responseData.message,
             };
         }
         return {
+            data:responseData,
             msg: responseData.message,
         };
     } catch (e) {

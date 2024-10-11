@@ -1,17 +1,17 @@
 "use client";
 
-import { loginFormAction, registerFormAction } from "@/lib/actions/auth";
-import { Input } from "../ui/input";
+import { registerFormAction } from "@/lib/actions/auth";
+import { userRegisterSchema } from "@/lib/form-validation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "../ui/form";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { userRegisterSchema } from "@/lib/form-validation";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
-import { useState } from "react";
+import { Input } from "../ui/input";
 
 export default function RegisterForm() {
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -28,8 +28,9 @@ export default function RegisterForm() {
     const onSubmit = async (values: z.infer<typeof userRegisterSchema>) => {
         setIsLoading(true);
         const res = await registerFormAction(values);
+        localStorage.setItem("userDetails", JSON.stringify({ name: res.data.data.name, email: res.data.data.email }));
         if (res.msg === "success") {
-            router.push("/login");
+            router.push("/dashboard");
         }
         setIsLoading(false);
     };

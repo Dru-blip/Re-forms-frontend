@@ -29,13 +29,11 @@ export default async function FormResponse({ params }: { params: { id: string; r
                     <CardDescription>{form?.settings.confirmationMessage}</CardDescription>
                 </CardHeader>
                 <CardFooter className="grid grid-cols-1 gap-4">
-                    {form?.settings.editResponse ? (
+                   
                         <Link className="underline" href={`/forms/${form?.id}/responses/${params.responseId}/view`}>
                             View your response
                         </Link>
-                    ) : (
-                        <></>
-                    )}
+                    
                     {form?.settings.anotherResponse ? (
                         <Link href={`/forms/${params.id}/live`} className="underline">
                             Submit another response

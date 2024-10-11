@@ -5,7 +5,7 @@ import { cookies } from "next/headers";
 async function fetchForm(id: string): Promise<Form | null> {
     const token = cookies().get("token")!;
     try {
-        const response = await fetch(process.env.BASE_API + "/forms", {
+        const response = await fetch(process.env.BASE_API + `/forms/${id}`, {
             headers: {
                 "Content-type": "application/json",
                 Authorization: `Bearer ${token.value}`,

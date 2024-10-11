@@ -2,7 +2,6 @@ import { ResponseViewer } from "@/components/responses/response-viewer";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { ApiResponse, Response } from "@/types";
 import { format } from "date-fns";
-import { cookies } from "next/headers";
 
 const fetchResponse = async (formId: string, responseId: string) => {
     // const token = cookies().get("token")!;
@@ -23,7 +22,7 @@ export default async function ViewResponse({ params }: { params: { id: string; r
     const response = await fetchResponse(params.id, params.responseId);
     
     return (
-        <div className="container flex flex-col gap-3">
+        <div className="container flex flex-col gap-3 py-8">
             <p>submitted {format(response?.submittedDate!,"Pp")}</p>
             <div>
                 <Card>

@@ -1,8 +1,9 @@
 "use client"
 
+import * as formActions from "@/lib/actions/form";
 import { Form } from "@/types";
 import { format } from 'date-fns';
-import { BanIcon, Edit2Icon, Loader2Icon, LucideEye, Settings2Icon, Trash, Trash2, } from "lucide-react";
+import { BanIcon, BarChart2Icon, Edit2Icon, Loader2Icon, LucideEye, Settings2Icon, Trash, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "../ui/alert-dialog";
@@ -10,8 +11,6 @@ import { Button } from "../ui/button";
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "../ui/card";
 import { Label } from "../ui/label";
 import { Separator } from "../ui/separator";
-import * as formActions from "@/lib/actions/form"
-import { Icon } from '@iconify-icon/react';
 
 interface Props {
     form: Form
@@ -43,6 +42,11 @@ export default function FormCard({ form }: Props) {
                     </Button>
                 </Link>
                 <Link href={`/forms/${form.id}/responses/table`}>
+                    <Button variant={"ghost"} size={"icon"}>
+                        <BarChart2Icon />
+                    </Button>
+                </Link>
+                <Link href={`/forms/${form.id}/live`} target="_blank">
                     <Button variant={"ghost"} size={"icon"}>
                         <LucideEye className="w-5 h-5" />
                     </Button>
