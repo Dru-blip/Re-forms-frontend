@@ -27,7 +27,7 @@ export default function FormCard({ form }: Props) {
         <Card>
             <CardHeader>
                 <CardTitle>
-                    <Link href={`/forms/${form.id}/edit`} className="hover:underline ">
+                    <Link href={`/forms/${form.id}/edit`} data-test-id="edit-form-link" className="hover:underline ">
                         {form.title}
                     </Link>
                 </CardTitle>
@@ -59,7 +59,7 @@ export default function FormCard({ form }: Props) {
                 </Link>
                 <AlertDialog>
                     <AlertDialogTrigger asChild>
-                        <Button variant={"ghost"} size={"icon"}>
+                        <Button data-test-id="delete-form-trigger" variant={"ghost"} size={"icon"}>
                             <Trash className="w-5 h-5" />
                         </Button>
                     </AlertDialogTrigger>
@@ -73,7 +73,7 @@ export default function FormCard({ form }: Props) {
                                 <BanIcon className="mr-2 w-4 h-4" />
                                 Cancel
                             </AlertDialogCancel>
-                            <AlertDialogAction className="bg-destructive" disabled={isLoading} onClick={onClick}>
+                            <AlertDialogAction data-test-id="delete-form-action" className="bg-destructive" disabled={isLoading} onClick={onClick}>
                                 {
 
                                     isLoading ? <Loader2Icon className="mr-2 w-4 h-4 animate-spin" /> : <Trash2 className="mr-2 w-4 h-4" />

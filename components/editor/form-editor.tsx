@@ -37,7 +37,7 @@ export default function FormEditor() {
             <div>{formQuestions ? <QuestionsList /> : <></>}</div>
             <Card className=" flex items-center justify-center px-6 py-6">
                 <div className="py-8 border-dotted border-4 rounded-xl w-full flex items-center justify-center">
-                    <Button variant={"ghost"} disabled={isLoading} onClick={addQuestion}>
+                    <Button data-test-id="add-question-btn" variant={"ghost"} disabled={isLoading} onClick={addQuestion}>
                         {isLoading ? (
                             <Loader2Icon className="mr-2 w-4 h-4 animate-spin" />
                         ) : (

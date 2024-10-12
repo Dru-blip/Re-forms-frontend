@@ -26,7 +26,7 @@ export default function CreateFormDialog() {
     return (
         <Dialog>
             <DialogTrigger asChild className="h-full">
-                <Button variant={"outline"} className="h-[100px] flex flex-col items-center justify-around">
+                <Button variant={"outline"} test-id="createForm" className="h-[100px] flex flex-col items-center justify-around">
                     <Plus className="mr-2" />
                     Empty Form
                 </Button>
@@ -52,7 +52,7 @@ export default function CreateFormDialog() {
                     <DialogClose asChild>
                         <Button variant={"secondary"}>Close</Button>
                     </DialogClose>
-                    <Button onClick={onClick} disabled={isLoading}>
+                    <Button test-id="create" onClick={onClick} disabled={isLoading}>
                         {isLoading ? (
                             <Loader2Icon className="mr-2 w-4 h-4 animate-spin" />
                         ) : (
